@@ -93,30 +93,33 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
+    print('🟢 Entrando al build. _registroExitoso=$_registroExitoso');
     final screenSize = MediaQuery.of(context).size;
     final isSmallScreen = screenSize.width < 400;
 
     if (_registroExitoso) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.check_circle_outline, color: Colors.green, size: 64),
-            SizedBox(height: 24),
-            Text(
-              '¡Registro completado! Ahora puedes iniciar sesión.',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 24),
-            TextButton(
-              onPressed: () {
-                // Opcional: podrías navegar al login aquí si el usuario lo desea
-                Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
-              },
-              child: Text('Ir a iniciar sesión'),
-            ),
-          ],
+      print('🟢 Mostrando mensaje de éxito');
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.check_circle_outline, color: Colors.green, size: 64),
+              SizedBox(height: 24),
+              Text(
+                '¡Registro completado! Ahora puedes iniciar sesión.',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 24),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+                },
+                child: Text('Ir a iniciar sesión'),
+              ),
+            ],
+          ),
         ),
       );
     }
