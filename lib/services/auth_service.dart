@@ -180,7 +180,6 @@ class AuthService extends ChangeNotifier {
 
       if (response.statusCode == 201) {
         print('🎉 Registro exitoso, limpiando estado...');
-        // Limpiar estado directamente sin usar clearAfterRegister
         _isLoading = false;
         _error = null;
         notifyListeners();
@@ -200,12 +199,6 @@ class AuthService extends ChangeNotifier {
       _setError('Error de conexión: $e');
       print('❌ Register error: $e');
       return false;
-    } finally {
-      // Asegurar que el loading se detenga en caso de error
-      if (_isLoading) {
-        print('🔧 Deteniendo loading en finally block');
-        _setLoading(false);
-      }
     }
   }
 

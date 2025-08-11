@@ -32,65 +32,75 @@ class _RegisterFormState extends State<RegisterForm> {
       
       print('🚀 Iniciando registro...');
       
-      final success = await authService.register(
-        _usernameController.text.trim(),
-        _passwordController.text,
-      );
-
-      print('📋 Resultado del registro: $success');
-      print('🔍 Context mounted: ${context.mounted}');
-      print('🔍 Success es true: ${success == true}');
-      print('🔍 Context mounted es true: ${context.mounted == true}');
-
-      print('🔍 Evaluando condición: success && context.mounted');
-      if (success && context.mounted) {
-        print('✅ Condición verdadera, entrando al bloque if');
-        print('✅ Registro exitoso, mostrando mensaje...');
-        
-        // Mostrar mensaje de éxito y navegar inmediatamente
-        print('📱 Mostrando SnackBar...');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Usuario registrado exitosamente'),
-            backgroundColor: Colors.green,
-            duration: Duration(seconds: 2),
-          ),
+      try {
+        final success = await authService.register(
+          _usernameController.text.trim(),
+          _passwordController.text,
         );
-        print('📱 SnackBar mostrado');
-        
-        print('🔄 Redirigiendo al login inmediatamente...');
-        // Redirigir al login inmediatamente después del registro exitoso
-        if (context.mounted) {
-          print('🔍 Intentando navegación...');
-          try {
-            // Usar pushAndRemoveUntil para limpiar el stack
-            Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
-            print('✅ Navegación exitosa');
-          } catch (e) {
-            print('❌ Error en navegación: $e');
-            // Fallback usando navigatorKey
-            try {
-              navigatorKey.currentState?.pushNamedAndRemoveUntil('/login', (route) => false);
-              print('✅ Navegación con fallback exitosa');
-            } catch (e2) {
-              print('❌ Error en fallback: $e2');
-            }
-          }
-        } else {
-          print('❌ Context no está montado');
-        }
-      } else {
-        print('❌ No se cumplió la condición success && context.mounted');
-        print('❌ Success: $success, Context mounted: ${context.mounted}');
-        if (!success && context.mounted) {
-          print('❌ Registro fallido: ${authService.error}');
+
+        print('📋 Resultado del registro: $success');
+        print('🔍 Context mounted: ${context.mounted}');
+
+        if (success == true && context.mounted) {
+          print('✅ Registro exitoso, navegando...');
+          
+          // Mostrar mensaje de éxito
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(authService.error ?? 'Error en el registro'),
+              content: Text('Usuario registrado exitosamente'),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 2),
+            ),
+          );
+          
+          // Navegar inmediatamente usando un método separado
+          _navigateToLogin();
+          print('✅ Navegación completada');
+        } else {
+          print('❌ Registro fallido o contexto no montado');
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(authService.error ?? 'Error en el registro'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        }
+      } catch (e) {
+        print('❌ Error en el proceso de registro: $e');
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error inesperado: $e'),
               backgroundColor: Colors.red,
             ),
           );
         }
+      }
+    }
+  }
+
+  /// Método para navegar al login
+  void _navigateToLogin() {
+    print('🔄 _navigateToLogin() ejecutándose...');
+    try {
+      if (context.mounted) {
+        Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+        print('✅ Navegación exitosa desde _navigateToLogin');
+      } else {
+        print('❌ Context no está montado en _navigateToLogin');
+        // Fallback
+        navigatorKey.currentState?.pushNamedAndRemoveUntil('/login', (route) => false);
+      }
+    } catch (e) {
+      print('❌ Error en _navigateToLogin: $e');
+      // Fallback
+      try {
+        navigatorKey.currentState?.pushNamedAndRemoveUntil('/login', (route) => false);
+        print('✅ Navegación con fallback exitosa');
+      } catch (e2) {
+        print('❌ Error en fallback: $e2');
       }
     }
   }
