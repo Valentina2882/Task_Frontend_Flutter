@@ -36,12 +36,16 @@ class _RegisterFormState extends State<RegisterForm> {
           _usernameController.text.trim(),
           _passwordController.text,
         );
-        print('📋 Resultado del registro: $success');
+        print('📋 RegisterForm: Recibido resultado del registro: $success');
+        print('📋 RegisterForm: Tipo de success: ${success.runtimeType}');
         print('🔍 Context mounted: ${context.mounted}');
         if (success == true && context.mounted) {
+          print('✅ RegisterForm: Ejecutando setState...');
           setState(() {
             _registroExitoso = true;
+            print('✅ RegisterForm: _registroExitoso set to true');
           });
+          print('✅ RegisterForm: setState completado');
         } else {
           print('❌ Registro fallido o contexto no montado');
           if (context.mounted) {
