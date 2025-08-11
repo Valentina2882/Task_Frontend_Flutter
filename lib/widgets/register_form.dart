@@ -16,7 +16,8 @@ class _RegisterFormState extends State<RegisterForm> {
   final _confirmPasswordController = TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
-  bool _registroExitoso = false; // Nuevo flag
+  bool _registroExitoso = false;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -29,6 +30,10 @@ class _RegisterFormState extends State<RegisterForm> {
   /// Maneja el proceso de registro
   Future<void> _handleRegister() async {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+      
       final authService = Provider.of<AuthService>(context, listen: false);
       print('🚀 Iniciando registro...');
       try {
@@ -39,13 +44,18 @@ class _RegisterFormState extends State<RegisterForm> {
         print('📋 RegisterForm: Recibido resultado del registro: $success');
         print('📋 RegisterForm: Tipo de success: ${success.runtimeType}');
         print('🔍 Context mounted: ${context.mounted}');
-        if (success == true && context.mounted) {
-          print('✅ RegisterForm: Ejecutando setState...');
-          setState(() {
-            _registroExitoso = true;
-            print('✅ RegisterForm: _registroExitoso set to true');
-          });
-          print('✅ RegisterForm: setState completado');
+        if (success == true) {
+          print('✅ RegisterForm: Success es true, ejecutando setState...');
+          if (mounted) {
+            setState(() {
+              _registroExitoso = true;
+              _isLoading = false;
+              print('✅ RegisterForm: _registroExitoso set to true');
+            });
+            print('✅ RegisterForm: setState completado');
+          } else {
+            print('❌ RegisterForm: Widget no está montado');
+          }
         } else {
           print('❌ Registro fallido o contexto no montado');
           if (context.mounted) {
@@ -59,6 +69,9 @@ class _RegisterFormState extends State<RegisterForm> {
         }
       } catch (e) {
         print('❌ Error en el proceso de registro: $e');
+        setState(() {
+          _isLoading = false;
+        });
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -286,55 +299,51 @@ class _RegisterFormState extends State<RegisterForm> {
           SizedBox(height: isSmallScreen ? 20 : 30),
 
           // Botón de registro con gradiente
-          Consumer<AuthService>(
-            builder: (context, authService, child) {
-              return Container(
-                width: double.infinity,
-                height: isSmallScreen ? 45 : 55,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Color(0xFF4A148C), // Morado muy oscuro
-                      Color(0xFF6A1B9A), // Morado oscuro
-                      Color(0xFF8E24AA), // Morado medio
-                    ],
-                  ),
+          Container(
+            width: double.infinity,
+            height: isSmallScreen ? 45 : 55,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFF4A148C), // Morado muy oscuro
+                  Color(0xFF6A1B9A), // Morado oscuro
+                  Color(0xFF8E24AA), // Morado medio
+                ],
+              ),
+              borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0xFF4A148C).withOpacity(0.3),
+                  blurRadius: 10,
+                  offset: Offset(0, 5),
+                ),
+              ],
+            ),
+            child: ElevatedButton(
+              onPressed: (!_registroExitoso && !_isLoading) ? _handleRegister : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                shadowColor: Colors.transparent,
+                shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0xFF4A148C).withOpacity(0.3),
-                      blurRadius: 10,
-                      offset: Offset(0, 5),
-                    ),
-                  ],
                 ),
-                child: ElevatedButton(
-                  onPressed: (!_registroExitoso && !authService.isLoading) ? _handleRegister : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
+              ),
+              child: _isLoading
+                  ? CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 3,
+                    )
+                  : Text(
+                      '✨ Registrarse',
+                      style: TextStyle(
+                        fontSize: isSmallScreen ? 16 : 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  child: authService.isLoading
-                      ? CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 3,
-                        )
-                      : Text(
-                          '✨ Registrarse',
-                          style: TextStyle(
-                            fontSize: isSmallScreen ? 16 : 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                ),
-              );
-            },
+            ),
           ),
         ],
       ),
