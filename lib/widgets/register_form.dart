@@ -39,8 +39,12 @@ class _RegisterFormState extends State<RegisterForm> {
 
       print('📋 Resultado del registro: $success');
       print('🔍 Context mounted: ${context.mounted}');
+      print('🔍 Success es true: ${success == true}');
+      print('🔍 Context mounted es true: ${context.mounted == true}');
 
+      print('🔍 Evaluando condición: success && context.mounted');
       if (success && context.mounted) {
+        print('✅ Condición verdadera, entrando al bloque if');
         print('✅ Registro exitoso, mostrando mensaje...');
         
         // Mostrar mensaje de éxito y navegar inmediatamente
@@ -75,14 +79,18 @@ class _RegisterFormState extends State<RegisterForm> {
         } else {
           print('❌ Context no está montado');
         }
-      } else if (!success && context.mounted) {
-        print('❌ Registro fallido: ${authService.error}');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(authService.error ?? 'Error en el registro'),
-            backgroundColor: Colors.red,
-          ),
-        );
+      } else {
+        print('❌ No se cumplió la condición success && context.mounted');
+        print('❌ Success: $success, Context mounted: ${context.mounted}');
+        if (!success && context.mounted) {
+          print('❌ Registro fallido: ${authService.error}');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(authService.error ?? 'Error en el registro'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       }
     }
   }

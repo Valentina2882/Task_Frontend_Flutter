@@ -185,6 +185,7 @@ class AuthService extends ChangeNotifier {
         _error = null;
         notifyListeners();
         print('✅ Register successful, estado limpiado');
+        print('🔄 Retornando true desde register()');
         return true;
       } else if (response.statusCode == 409) {
         _setError('El nombre de usuario ya existe');
