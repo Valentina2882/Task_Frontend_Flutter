@@ -53,4 +53,3 @@ Este es el frontend de la aplicación de gestión de tareas, desarrollado con **
 >
 > - Vercel NO soporta completamente Flutter Web: pueden aparecer pantallas blancas o problemas de navegación automática.
 > - Tras registrarte, la app intenta redirigirte automáticamente a `/login`. Si no ocurre, navega manualmente a `/login`.
-> - Para producción y navegación fluida, se recomienda Netlify, Firebase Hosting o GitHub Pages.
