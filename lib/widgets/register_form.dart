@@ -16,7 +16,7 @@ class _RegisterFormState extends State<RegisterForm> {
   final _confirmPasswordController = TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
-  bool _isRedirecting = false; // Nuevo flag
+  bool _registroExitoso = false; // Nuevo flag
 
   @override
   void dispose() {
@@ -40,15 +40,7 @@ class _RegisterFormState extends State<RegisterForm> {
         print('🔍 Context mounted: ${context.mounted}');
         if (success == true && context.mounted) {
           setState(() {
-            _isRedirecting = true;
-          });
-          Future.delayed(Duration(milliseconds: 100), () {
-            print('🔄 Intentando navegar con navigatorKey global...');
-            navigatorKey.currentState?.pushNamedAndRemoveUntil('/login', (route) => false);
-            print('✅ Navegación (o intento) realizada');
-            // Workaround extremo: recargar la página si la navegación no funciona
-            // import 'dart:html' as html;
-            // html.window.location.reload();
+            _registroExitoso = true;
           });
         } else {
           print('❌ Registro fallido o contexto no montado');
@@ -71,31 +63,6 @@ class _RegisterFormState extends State<RegisterForm> {
             ),
           );
         }
-      }
-    }
-  }
-
-  /// Método para navegar al login (ya no se usa, pero se deja por si acaso)
-  void _navigateToLogin() {
-    print('🔄 _navigateToLogin() ejecutándose...');
-    try {
-      if (context.mounted) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
-          print('✅ Navegación exitosa desde _navigateToLogin');
-        });
-      } else {
-        print('❌ Context no está montado en _navigateToLogin');
-        navigatorKey.currentState?.pushNamedAndRemoveUntil('/login', (route) => false);
-      }
-    } catch (e) {
-      print('❌ Error en _navigateToLogin: $e');
-      // Fallback
-      try {
-        navigatorKey.currentState?.pushNamedAndRemoveUntil('/login', (route) => false);
-        print('✅ Navegación con fallback exitosa');
-      } catch (e2) {
-        print('❌ Error en fallback: $e2');
       }
     }
   }
@@ -126,21 +93,34 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isRedirecting) {
+    final screenSize = MediaQuery.of(context).size;
+    final isSmallScreen = screenSize.width < 400;
+
+    if (_registroExitoso) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 16),
-            Text('Redirigiendo al login...'),
+            Icon(Icons.check_circle_outline, color: Colors.green, size: 64),
+            SizedBox(height: 24),
+            Text(
+              '¡Registro completado! Ahora puedes iniciar sesión.',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 24),
+            TextButton(
+              onPressed: () {
+                // Opcional: podrías navegar al login aquí si el usuario lo desea
+                Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+              },
+              child: Text('Ir a iniciar sesión'),
+            ),
           ],
         ),
       );
     }
-    final screenSize = MediaQuery.of(context).size;
-    final isSmallScreen = screenSize.width < 400;
-    
+
     return Form(
       key: _formKey,
       child: Column(
@@ -148,6 +128,7 @@ class _RegisterFormState extends State<RegisterForm> {
           // Campo de username
           TextFormField(
             controller: _usernameController,
+            enabled: !_registroExitoso,
             decoration: InputDecoration(
               labelText: 'Nombre de usuario',
               labelStyle: TextStyle(
@@ -195,6 +176,7 @@ class _RegisterFormState extends State<RegisterForm> {
           TextFormField(
             controller: _passwordController,
             obscureText: _obscurePassword,
+            enabled: !_registroExitoso,
             decoration: InputDecoration(
               labelText: 'Contraseña',
               labelStyle: TextStyle(
@@ -209,11 +191,11 @@ class _RegisterFormState extends State<RegisterForm> {
                   color: Colors.black54,
                   size: isSmallScreen ? 20 : 24,
                 ),
-                onPressed: () {
+                onPressed: !_registroExitoso ? () {
                   setState(() {
                     _obscurePassword = !_obscurePassword;
                   });
-                },
+                } : null,
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
@@ -243,6 +225,7 @@ class _RegisterFormState extends State<RegisterForm> {
           TextFormField(
             controller: _confirmPasswordController,
             obscureText: _obscureConfirmPassword,
+            enabled: !_registroExitoso,
             decoration: InputDecoration(
               labelText: 'Confirmar contraseña',
               labelStyle: TextStyle(
@@ -257,11 +240,11 @@ class _RegisterFormState extends State<RegisterForm> {
                   color: Colors.black54,
                   size: isSmallScreen ? 20 : 24,
                 ),
-                onPressed: () {
+                onPressed: !_registroExitoso ? () {
                   setState(() {
                     _obscureConfirmPassword = !_obscureConfirmPassword;
                   });
-                },
+                } : null,
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
@@ -321,7 +304,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   ],
                 ),
                 child: ElevatedButton(
-                  onPressed: authService.isLoading ? null : _handleRegister,
+                  onPressed: (!_registroExitoso && !authService.isLoading) ? _handleRegister : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,
                     shadowColor: Colors.transparent,
