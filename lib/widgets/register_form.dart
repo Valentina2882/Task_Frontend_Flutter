@@ -86,11 +86,12 @@ class _RegisterFormState extends State<RegisterForm> {
     print('🔄 _navigateToLogin() ejecutándose...');
     try {
       if (context.mounted) {
-        Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
-        print('✅ Navegación exitosa desde _navigateToLogin');
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+          print('✅ Navegación exitosa desde _navigateToLogin');
+        });
       } else {
         print('❌ Context no está montado en _navigateToLogin');
-        // Fallback
         navigatorKey.currentState?.pushNamedAndRemoveUntil('/login', (route) => false);
       }
     } catch (e) {
