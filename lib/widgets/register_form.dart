@@ -16,6 +16,7 @@ class _RegisterFormState extends State<RegisterForm> {
   final _confirmPasswordController = TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+  bool _isRedirecting = false; // Nuevo flag
 
   @override
   void dispose() {
@@ -29,33 +30,26 @@ class _RegisterFormState extends State<RegisterForm> {
   Future<void> _handleRegister() async {
     if (_formKey.currentState!.validate()) {
       final authService = Provider.of<AuthService>(context, listen: false);
-      
       print('🚀 Iniciando registro...');
-      
       try {
         final success = await authService.register(
           _usernameController.text.trim(),
           _passwordController.text,
         );
-
         print('📋 Resultado del registro: $success');
         print('🔍 Context mounted: ${context.mounted}');
-
         if (success == true && context.mounted) {
-          print('✅ Registro exitoso, navegando...');
-          
-          // Mostrar mensaje de éxito
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Usuario registrado exitosamente'),
-              backgroundColor: Colors.green,
-              duration: Duration(seconds: 2),
-            ),
-          );
-          
-          // Navegar inmediatamente usando un método separado
-          _navigateToLogin();
-          print('✅ Navegación completada');
+          setState(() {
+            _isRedirecting = true;
+          });
+          Future.delayed(Duration(milliseconds: 100), () {
+            print('🔄 Intentando navegar con navigatorKey global...');
+            navigatorKey.currentState?.pushNamedAndRemoveUntil('/login', (route) => false);
+            print('✅ Navegación (o intento) realizada');
+            // Workaround extremo: recargar la página si la navegación no funciona
+            // import 'dart:html' as html;
+            // html.window.location.reload();
+          });
         } else {
           print('❌ Registro fallido o contexto no montado');
           if (context.mounted) {
@@ -81,7 +75,7 @@ class _RegisterFormState extends State<RegisterForm> {
     }
   }
 
-  /// Método para navegar al login
+  /// Método para navegar al login (ya no se usa, pero se deja por si acaso)
   void _navigateToLogin() {
     print('🔄 _navigateToLogin() ejecutándose...');
     try {
@@ -132,6 +126,18 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isRedirecting) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 16),
+            Text('Redirigiendo al login...'),
+          ],
+        ),
+      );
+    }
     final screenSize = MediaQuery.of(context).size;
     final isSmallScreen = screenSize.width < 400;
     
