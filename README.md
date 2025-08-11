@@ -45,16 +45,12 @@ Este es el frontend de la aplicación de gestión de tareas, desarrollado con **
 1. Ejecuta `flutter build web --base-href /<repo>/`.
 2. Sube el contenido de `build/web` a la rama `gh-pages`.
 
-## ⚠️ Advertencia sobre Vercel
+---
 
-> **Vercel NO es compatible al 100% con Flutter Web.**
->
-> - Puede aparecer pantalla blanca tras el registro o navegación.
-> - La navegación automática puede fallar.
-> - El usuario debe navegar manualmente al login si no es redirigido.
->
-> **Recomendamos usar Netlify, Firebase Hosting o GitHub Pages para producción.**
+## ⚠️ Advertencia sobre Vercel y Flutter Web
 
-## Créditos y contacto
-- Autor: [Tu Nombre]
-- Contacto: [tu.email@dominio.com]
+> **Este proyecto está desplegado en Vercel.**
+>
+> - Vercel NO soporta completamente Flutter Web: pueden aparecer pantallas blancas o problemas de navegación automática.
+> - Tras registrarte, la app intenta redirigirte automáticamente a `/login`. Si no ocurre, navega manualmente a `/login`.
+> - Para producción y navegación fluida, se recomienda Netlify, Firebase Hosting o GitHub Pages.
