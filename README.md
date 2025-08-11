@@ -79,6 +79,7 @@ final themes = [
 
 ## 🔐 Autenticación
 
+<<<<<<< HEAD
 ### JWT Token Management
 - **AuthService**: Gestión completa de tokens JWT
 - **Headers automáticos**: `Authorization: Bearer <token>`
@@ -205,3 +206,9 @@ print('📥 Response body: ${response.body}');
 - [Provider Package](https://pub.dev/packages/provider)
 - [HTTP Package](https://pub.dev/packages/http)
 - [Material Design 3](https://m3.material.io/)
+=======
+> **Este proyecto está desplegado en Vercel.**
+>
+> - Vercel NO soporta completamente Flutter Web: pueden aparecer pantallas blancas o problemas de navegación automática.
+> - Tras registrarte, la app intenta redirigirte automáticamente a `/login`. Si no ocurre, navega manualmente a `/login`.
+>>>>>>> b4da6d28571c98ccd9cf10a5f7f1ffa7cb72a209
