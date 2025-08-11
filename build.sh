@@ -13,7 +13,11 @@ flutter pub get
 # Compilar para web
 flutter build web --release
 
-# Mover archivos a la carpeta correcta para Vercel
-cp -r build/web/* .
+# Crear directorio public para Vercel
+mkdir -p public
+
+# Mover archivos de build/web a public
+cp -r build/web/* public/
 
 echo "Build completado exitosamente!"
+echo "Archivos copiados a directorio public/"
