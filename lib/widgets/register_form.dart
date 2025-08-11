@@ -41,7 +41,12 @@ class _RegisterFormState extends State<RegisterForm> {
             backgroundColor: Colors.green,
           ),
         );
-        Navigator.pop(context);
+        // Redirigir al login después del registro exitoso
+        Navigator.pushNamedAndRemoveUntil(
+          context, 
+          '/login', 
+          (route) => false
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
