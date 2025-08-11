@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_service.dart';
+import '../utils/navigation.dart';
 
 /// Widget que maneja el formulario de registro
 class RegisterForm extends StatefulWidget {
@@ -35,15 +36,20 @@ class _RegisterFormState extends State<RegisterForm> {
       );
 
       if (success) {
+        // Mostrar mensaje de éxito
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Usuario registrado exitosamente'),
             backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
           ),
         );
-        // Redirigir al login después del registro exitoso
-        Navigator.pushNamedAndRemoveUntil(
-          context, 
+        
+        // Esperar un momento y luego redirigir al login
+        await Future.delayed(Duration(milliseconds: 1000));
+        
+        // Redirigir al login después del registro exitoso usando navigatorKey global
+        navigatorKey.currentState?.pushNamedAndRemoveUntil(
           '/login', 
           (route) => false
         );
