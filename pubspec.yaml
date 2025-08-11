@@ -1,0 +1,53 @@
+name: task_management_app
+description: Aplicación Flutter para gestión de tareas con backend NestJS
+
+# Versión de la aplicación
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+# Dependencias de Flutter
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # UI y componentes
+  cupertino_icons: ^1.0.2
+
+  # Gestión de estado
+  provider: ^6.0.5
+
+  # Peticiones HTTP
+  http: ^1.1.0
+
+  # Almacenamiento local (opcional para persistir token)
+  shared_preferences: ^2.2.2
+
+  # Validación de formularios
+  form_validator: ^2.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # Herramientas de desarrollo
+  flutter_lints: ^3.0.0
+
+# Configuración de Flutter
+flutter:
+  # Recursos de la aplicación
+  uses-material-design: true
+
+  # Fuentes personalizadas (opcional)
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+
+  # Imágenes y assets (opcional)
+  # assets:
+  #   - images/
+  #   - assets/

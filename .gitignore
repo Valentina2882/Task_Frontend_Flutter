@@ -1,0 +1,47 @@
+# Flutter specific
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+build/
+
+# Android build folders
+/android/app/debug/
+/android/app/profile/
+/android/app/release/
+
+# iOS build folders and artifacts
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/ephemeral/
+ios/Pods/
+ios/.symlinks/
+ios/Runner.xcworkspace/
+
+# IDE specific
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VSCode settings (si no quieres incluirlos, quita el comentario)
+/.vscode/
+
+# Otros archivos de sistema y temporales
+*.log
+*.lock
+*.swp
+.DS_Store
+*.class
+*.pyc
+*.orig
+*.rej
+
+# Carpeta para migraciones (si usas bases de datos tipo SQLite o similares)
+migrate_working_dir/
+
+# Cachés y paquetes
+.packages
