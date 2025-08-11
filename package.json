@@ -1,0 +1,14 @@
+{
+  "name": "task-manager-flutter-web",
+  "version": "1.0.0",
+  "description": "Task Manager Flutter Web App",
+  "scripts": {
+    "build": "chmod +x build.sh && ./build.sh",
+    "dev": "flutter run -d web-server --web-port 3000"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

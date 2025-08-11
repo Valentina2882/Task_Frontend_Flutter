@@ -198,3 +198,66 @@ static const String baseUrl = 'https://tu-servidor.com';
 ## 📄 Licencia
 
 Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
+
+# Task Manager Flutter Web
+
+Aplicación de gestión de tareas construida con Flutter Web.
+
+## 🚀 Despliegue en Vercel
+
+### Pasos para desplegar:
+
+1. **Preparar el proyecto**:
+   ```bash
+   # Asegúrate de estar en la carpeta frontend_tasks
+   cd frontend_tasks
+   
+   # Obtener dependencias
+   flutter pub get
+   
+   # Compilar para web
+   flutter build web --release
+   ```
+
+2. **Conectar con Vercel**:
+   - Ve a [vercel.com](https://vercel.com)
+   - Conecta tu repositorio de GitHub
+   - Selecciona la carpeta `frontend_tasks`
+   - Vercel detectará automáticamente la configuración
+
+3. **Configuración automática**:
+   - Vercel usará el `package.json` y `vercel.json` incluidos
+   - El script de build se ejecutará automáticamente
+   - La aplicación estará disponible en tu dominio de Vercel
+
+### 📁 Archivos de configuración:
+
+- `vercel.json`: Configuración de rutas y headers
+- `package.json`: Scripts de build para Vercel
+- `build.sh`: Script de compilación de Flutter
+
+### 🔗 Backend:
+
+La aplicación está configurada para consumir el backend en:
+`https://taskbackendnestjs-production.up.railway.app`
+
+### 🌐 URLs de desarrollo:
+
+- **Frontend local**: `http://localhost:3000`
+- **Backend**: `https://taskbackendnestjs-production.up.railway.app`
+
+### 📱 Características:
+
+- ✅ Diseño responsive (320x642+)
+- ✅ Temas personalizables
+- ✅ Filtros y búsqueda
+- ✅ Gestión completa de tareas
+- ✅ Autenticación JWT
+- ✅ Animaciones suaves
+
+### 🛠️ Tecnologías:
+
+- **Frontend**: Flutter Web
+- **Backend**: NestJS (Railway)
+- **Estado**: Provider
+- **Despliegue**: Vercel

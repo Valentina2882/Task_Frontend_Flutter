@@ -19,7 +19,7 @@ class AuthService extends ChangeNotifier {
   bool get isAuthenticated => _accessToken != null;
 
   // URL base del backend
-  static const String baseUrl = 'http://localhost:3000';
+  static const String baseUrl = 'https://taskbackendnestjs-production.up.railway.app';
 
   /// Realiza el login del usuario
   /// Retorna true si el login es exitoso, false en caso contrario

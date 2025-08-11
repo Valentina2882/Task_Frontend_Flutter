@@ -17,7 +17,7 @@ class TaskService extends ChangeNotifier {
   String? get error => _error;
 
   // URL base del backend
-  static const String baseUrl = 'http://localhost:3000';
+  static const String baseUrl = 'https://taskbackendnestjs-production.up.railway.app';
 
   /// Obtiene todas las tareas del usuario autenticado
   /// Opcionalmente puede filtrar por estado y búsqueda
