@@ -38,12 +38,12 @@ class _RegisterFormState extends State<RegisterForm> {
       );
 
       print('📋 Resultado del registro: $success');
+      print('🔍 Context mounted: ${context.mounted}');
 
       if (success && context.mounted) {
         print('✅ Registro exitoso, mostrando mensaje...');
-        print('🔍 Context mounted: ${context.mounted}');
         
-        // Mostrar mensaje de éxito
+        // Mostrar mensaje de éxito y navegar inmediatamente
         print('📱 Mostrando SnackBar...');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -54,24 +54,19 @@ class _RegisterFormState extends State<RegisterForm> {
         );
         print('📱 SnackBar mostrado');
         
-        print('⏳ Esperando 1.5 segundos...');
-        // Esperar un momento y luego redirigir al login
-        await Future.delayed(Duration(milliseconds: 1500));
-        print('⏰ Delay completado');
-        
-        print('🔄 Redirigiendo al login...');
-        // Redirigir al login después del registro exitoso
+        print('🔄 Redirigiendo al login inmediatamente...');
+        // Redirigir al login inmediatamente después del registro exitoso
         if (context.mounted) {
           print('🔍 Intentando navegación...');
           try {
-            // Navegación simple sin pop
-            Navigator.of(context).pushReplacementNamed('/login');
+            // Usar pushAndRemoveUntil para limpiar el stack
+            Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
             print('✅ Navegación exitosa');
           } catch (e) {
             print('❌ Error en navegación: $e');
             // Fallback usando navigatorKey
             try {
-              navigatorKey.currentState?.pushReplacementNamed('/login');
+              navigatorKey.currentState?.pushNamedAndRemoveUntil('/login', (route) => false);
               print('✅ Navegación con fallback exitosa');
             } catch (e2) {
               print('❌ Error en fallback: $e2');

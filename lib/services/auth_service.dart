@@ -180,16 +180,11 @@ class AuthService extends ChangeNotifier {
 
       if (response.statusCode == 201) {
         print('🎉 Registro exitoso, limpiando estado...');
-        try {
-          clearAfterRegister();
-          print('✅ Register successful, estado limpiado');
-        } catch (e) {
-          print('❌ Error en clearAfterRegister: $e');
-          // Fallback: limpiar estado manualmente
-          _isLoading = false;
-          _clearError();
-          notifyListeners();
-        }
+        // Limpiar estado directamente sin usar clearAfterRegister
+        _isLoading = false;
+        _error = null;
+        notifyListeners();
+        print('✅ Register successful, estado limpiado');
         return true;
       } else if (response.statusCode == 409) {
         _setError('El nombre de usuario ya existe');
