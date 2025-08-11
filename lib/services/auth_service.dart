@@ -16,10 +16,85 @@ class AuthService extends ChangeNotifier {
   String? get accessToken => _accessToken;
   bool get isLoading => _isLoading;
   String? get error => _error;
-  bool get isAuthenticated => _accessToken != null;
+  bool get isAuthenticated => _accessToken != null && !_isTokenExpired();
 
   // URL base del backend
   static const String baseUrl = 'https://taskbackendnestjs-production.up.railway.app';
+
+  /// Valida si el token JWT ha expirado
+  bool _isTokenExpired() {
+    if (_accessToken == null) return true;
+    
+    try {
+      // Decodificar el token JWT (sin verificar la firma)
+      final parts = _accessToken!.split('.');
+      if (parts.length != 3) return true;
+      
+      // Decodificar el payload (segunda parte)
+      final payload = parts[1];
+      // Agregar padding si es necesario
+      final normalized = base64Url.normalize(payload);
+      final resp = utf8.decode(base64Url.decode(normalized));
+      final payloadMap = json.decode(resp);
+      
+      // Verificar la expiración
+      final exp = payloadMap['exp'];
+      if (exp == null) return true;
+      
+      final expiry = DateTime.fromMillisecondsSinceEpoch(exp * 1000);
+      final now = DateTime.now();
+      
+      return now.isAfter(expiry);
+    } catch (e) {
+      print('❌ Error validando token: $e');
+      return true;
+    }
+  }
+
+  /// Valida el token actual y retorna true si es válido
+  bool validateToken() {
+    if (_accessToken == null) {
+      print('❌ No hay token disponible');
+      return false;
+    }
+    
+    if (_isTokenExpired()) {
+      print('❌ Token expirado');
+      _accessToken = null;
+      _currentUser = null;
+      notifyListeners();
+      return false;
+    }
+    
+    print('✅ Token válido');
+    return true;
+  }
+
+  /// Verifica la validez del token con el backend
+  Future<bool> verifyTokenWithBackend() async {
+    if (!validateToken()) return false;
+    
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/auth/verify'),
+        headers: getAuthHeaders(),
+      );
+      
+      if (response.statusCode == 200) {
+        print('✅ Token verificado con el backend');
+        return true;
+      } else {
+        print('❌ Token inválido en el backend: ${response.statusCode}');
+        _accessToken = null;
+        _currentUser = null;
+        notifyListeners();
+        return false;
+      }
+    } catch (e) {
+      print('❌ Error verificando token: $e');
+      return false;
+    }
+  }
 
   /// Realiza el login del usuario
   /// Retorna true si el login es exitoso, false en caso contrario

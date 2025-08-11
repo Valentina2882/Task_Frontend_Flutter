@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../models/task.dart';
 import 'auth_service.dart';
+import 'http_interceptor.dart';
 
 /// Servicio que maneja todas las operaciones relacionadas con tareas
 /// Incluye CRUD completo y comunicación con el backend
@@ -39,16 +40,12 @@ class TaskService extends ChangeNotifier {
       }
 
       final uri = Uri.parse('$baseUrl/tasks').replace(queryParameters: queryParams);
-      final headers = authService.getAuthHeaders();
+      final interceptor = HttpInterceptor(authService);
       
       print('📋 Getting tasks from: $uri');
-      print('🔑 Auth headers: $headers');
       print('🔑 Access token: ${authService.accessToken}');
 
-      final response = await http.get(
-        uri,
-        headers: headers,
-      );
+      final response = await interceptor.get(uri.toString());
 
       print('📥 Tasks response status: ${response.statusCode}');
       print('📥 Tasks response body: ${response.body}');
@@ -63,6 +60,10 @@ class TaskService extends ChangeNotifier {
         _setError('Error al obtener las tareas (Status: ${response.statusCode})');
         return [];
       }
+    } on AuthException catch (e) {
+      _setError(e.toString());
+      print('❌ Auth error: $e');
+      return [];
     } catch (e) {
       _setError('Error de conexión: $e');
       print('❌ Get tasks error: $e');
@@ -106,16 +107,14 @@ class TaskService extends ChangeNotifier {
         'title': title,
         'description': description,
       });
-      final headers = authService.getAuthHeaders();
+      final interceptor = HttpInterceptor(authService);
       
       print('📝 Creating task at: $url');
       print('📤 Request body: $body');
-      print('🔑 Auth headers: $headers');
       print('🔑 Access token: ${authService.accessToken}');
 
-      final response = await http.post(
-        Uri.parse(url),
-        headers: headers,
+      final response = await interceptor.post(
+        url,
         body: body,
       );
 
@@ -135,6 +134,10 @@ class TaskService extends ChangeNotifier {
         print('❌ Create task failed: ${response.statusCode} - ${response.body}');
         return null;
       }
+    } on AuthException catch (e) {
+      _setError(e.toString());
+      print('❌ Auth error: $e');
+      return null;
     } catch (e) {
       _setError('Error de conexión: $e');
       print('❌ Create task error: $e');
@@ -152,9 +155,9 @@ class TaskService extends ChangeNotifier {
     _clearError();
 
     try {
-      final response = await http.patch(
-        Uri.parse('$baseUrl/tasks/$taskId/status'),
-        headers: authService.getAuthHeaders(),
+      final interceptor = HttpInterceptor(authService);
+      final response = await interceptor.patch(
+        '$baseUrl/tasks/$taskId/status',
         body: json.encode({
           'status': status.toString().split('.').last,
         }),
@@ -177,6 +180,10 @@ class TaskService extends ChangeNotifier {
         _setError('Error al actualizar la tarea');
         return null;
       }
+    } on AuthException catch (e) {
+      _setError(e.toString());
+      print('❌ Auth error: $e');
+      return null;
     } catch (e) {
       _setError('Error de conexión: $e');
       return null;
@@ -189,10 +196,8 @@ class TaskService extends ChangeNotifier {
     _clearError();
 
     try {
-      final response = await http.delete(
-        Uri.parse('$baseUrl/tasks/$taskId'),
-        headers: authService.getAuthHeaders(),
-      );
+      final interceptor = HttpInterceptor(authService);
+      final response = await interceptor.delete('$baseUrl/tasks/$taskId');
 
       if (response.statusCode == 200) {
         // Remover la tarea de la lista local
@@ -204,6 +209,10 @@ class TaskService extends ChangeNotifier {
         _setError('Error al eliminar la tarea');
         return false;
       }
+    } on AuthException catch (e) {
+      _setError(e.toString());
+      print('❌ Auth error: $e');
+      return false;
     } catch (e) {
       _setError('Error de conexión: $e');
       return false;

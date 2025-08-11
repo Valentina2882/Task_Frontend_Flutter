@@ -7,6 +7,7 @@ import 'services/auth_service.dart';
 import 'services/task_service.dart';
 import 'services/theme_service.dart';
 import 'utils/navigation.dart'; // Importar navigatorKey desde utils
+import 'widgets/auth_wrapper.dart';
 
 /// Punto de entrada principal de la aplicación Flutter
 /// Configura las rutas, providers y la inicialización necesaria
@@ -80,9 +81,9 @@ class MyApp extends StatelessWidget {
         navigatorKey: navigatorKey,
         initialRoute: '/login',
         routes: {
-          '/login': (context) => LoginScreen(),
-          '/register': (context) => RegisterScreen(),
-          '/home': (context) => HomeScreen(),
+          '/login': (context) => AuthWrapper(requireAuth: false, child: LoginScreen()),
+          '/register': (context) => AuthWrapper(requireAuth: false, child: RegisterScreen()),
+          '/home': (context) => AuthWrapper(child: HomeScreen()),
         },
       ),
     );
