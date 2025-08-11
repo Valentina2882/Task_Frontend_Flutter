@@ -81,8 +81,8 @@ class MyApp extends StatelessWidget {
         navigatorKey: navigatorKey,
         initialRoute: '/login',
         routes: {
-          '/login': (context) => AuthWrapper(requireAuth: false, child: LoginScreen()),
-          '/register': (context) => AuthWrapper(requireAuth: false, child: RegisterScreen()),
+          '/login': (context) => LoginScreen(),
+          '/register': (context) => RegisterScreen(),
           '/home': (context) => AuthWrapper(child: HomeScreen()),
         },
       ),

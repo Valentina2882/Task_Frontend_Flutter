@@ -180,8 +180,16 @@ class AuthService extends ChangeNotifier {
 
       if (response.statusCode == 201) {
         print('🎉 Registro exitoso, limpiando estado...');
-        clearAfterRegister();
-        print('✅ Register successful, estado limpiado');
+        try {
+          clearAfterRegister();
+          print('✅ Register successful, estado limpiado');
+        } catch (e) {
+          print('❌ Error en clearAfterRegister: $e');
+          // Fallback: limpiar estado manualmente
+          _isLoading = false;
+          _clearError();
+          notifyListeners();
+        }
         return true;
       } else if (response.statusCode == 409) {
         _setError('El nombre de usuario ya existe');
@@ -216,10 +224,14 @@ class AuthService extends ChangeNotifier {
   /// Limpia el estado después del registro exitoso
   void clearAfterRegister() {
     print('🧹 clearAfterRegister() ejecutándose...');
-    _isLoading = false;
-    _clearError();
-    notifyListeners();
-    print('🧹 Estado limpiado, notificando listeners');
+    try {
+      _isLoading = false;
+      _error = null;
+      notifyListeners();
+      print('🧹 Estado limpiado, notificando listeners');
+    } catch (e) {
+      print('❌ Error en clearAfterRegister: $e');
+    }
   }
 
   /// Obtiene los headers de autorización para las peticiones
