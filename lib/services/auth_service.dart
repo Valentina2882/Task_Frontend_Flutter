@@ -178,8 +178,7 @@ class AuthService extends ChangeNotifier {
       print('📥 Response body: ${response.body}');
 
       if (response.statusCode == 201) {
-        _setLoading(false);
-        notifyListeners();
+        clearAfterRegister();
         print('✅ Register successful');
         return true;
       } else if (response.statusCode == 409) {
@@ -195,6 +194,11 @@ class AuthService extends ChangeNotifier {
       _setError('Error de conexión: $e');
       print('❌ Register error: $e');
       return false;
+    } finally {
+      // Asegurar que el loading se detenga en caso de error
+      if (_isLoading) {
+        _setLoading(false);
+      }
     }
   }
 
@@ -202,6 +206,13 @@ class AuthService extends ChangeNotifier {
   void logout() {
     _currentUser = null;
     _accessToken = null;
+    _clearError();
+    notifyListeners();
+  }
+
+  /// Limpia el estado después del registro exitoso
+  void clearAfterRegister() {
+    _isLoading = false;
     _clearError();
     notifyListeners();
   }

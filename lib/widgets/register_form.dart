@@ -35,7 +35,7 @@ class _RegisterFormState extends State<RegisterForm> {
         _passwordController.text,
       );
 
-      if (success) {
+      if (success && context.mounted) {
         // Mostrar mensaje de éxito
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -46,14 +46,13 @@ class _RegisterFormState extends State<RegisterForm> {
         );
         
         // Esperar un momento y luego redirigir al login
-        await Future.delayed(Duration(milliseconds: 1000));
+        await Future.delayed(Duration(milliseconds: 1500));
         
-        // Redirigir al login después del registro exitoso usando navigatorKey global
-        navigatorKey.currentState?.pushNamedAndRemoveUntil(
-          '/login', 
-          (route) => false
-        );
-      } else {
+        // Redirigir al login después del registro exitoso
+        if (context.mounted) {
+          _navigateToLogin();
+        }
+      } else if (!success && context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(authService.error ?? 'Error en el registro'),
@@ -61,6 +60,24 @@ class _RegisterFormState extends State<RegisterForm> {
           ),
         );
       }
+    }
+  }
+
+  /// Método para navegar al login de manera segura
+  void _navigateToLogin() {
+    try {
+      // Intentar navegar usando el Navigator del contexto
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        '/login',
+        (route) => false,
+      );
+    } catch (e) {
+      print('Error navegando al login: $e');
+      // Fallback: usar el navigatorKey global
+      navigatorKey.currentState?.pushNamedAndRemoveUntil(
+        '/login',
+        (route) => false,
+      );
     }
   }
 

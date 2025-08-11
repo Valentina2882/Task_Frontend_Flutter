@@ -54,23 +54,35 @@ class _AuthWrapperState extends State<AuthWrapper> {
   }
 
   Future<void> _checkAuthStatus() async {
+    // Para pantallas que no requieren autenticación, no hacer verificación
+    if (!widget.requireAuth) {
+      if (mounted) {
+        setState(() {
+          _isChecking = false;
+        });
+      }
+      return;
+    }
+
     final authService = Provider.of<AuthService>(context, listen: false);
     
     // Validar el token si es requerido
-    if (widget.requireAuth) {
-      if (!authService.isAuthenticated) {
-        // Redirigir al login si no está autenticado
-        WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (!authService.isAuthenticated) {
+      // Redirigir al login si no está autenticado
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
           navigatorKey.currentState?.pushReplacementNamed('/login');
-        });
-      } else {
-        // Verificar con el backend si el token es válido
-        final isValid = await authService.verifyTokenWithBackend();
-        if (!isValid) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            navigatorKey.currentState?.pushReplacementNamed('/login');
-          });
         }
+      });
+    } else {
+      // Verificar con el backend si el token es válido
+      final isValid = await authService.verifyTokenWithBackend();
+      if (!isValid && mounted) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            navigatorKey.currentState?.pushReplacementNamed('/login');
+          }
+        });
       }
     }
     
@@ -83,6 +95,11 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
   @override
   Widget build(BuildContext context) {
+    // Para pantallas que no requieren autenticación, mostrar directamente
+    if (!widget.requireAuth) {
+      return widget.child;
+    }
+
     if (_isChecking) {
       return Scaffold(
         body: Center(
@@ -100,16 +117,8 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
     return Consumer<AuthService>(
       builder: (context, authService, child) {
-        // Si no requiere autenticación, mostrar el widget directamente
-        if (!widget.requireAuth) {
-          return widget.child;
-        }
-
-        // Si requiere autenticación pero no está autenticado, programar redirección como respaldo
+        // Si requiere autenticación pero no está autenticado, mostrar pantalla de carga
         if (!authService.isAuthenticated) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            navigatorKey.currentState?.pushReplacementNamed('/login');
-          });
           return Scaffold(
             body: Center(
               child: Column(
