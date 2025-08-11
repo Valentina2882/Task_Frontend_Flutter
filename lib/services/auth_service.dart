@@ -153,6 +153,7 @@ class AuthService extends ChangeNotifier {
   /// Registra un nuevo usuario
   /// Retorna true si el registro es exitoso, false en caso contrario
   Future<bool> register(String username, String password) async {
+    print('🔧 AuthService.register() iniciado');
     _setLoading(true);
     _clearError();
 
@@ -178,8 +179,9 @@ class AuthService extends ChangeNotifier {
       print('📥 Response body: ${response.body}');
 
       if (response.statusCode == 201) {
+        print('🎉 Registro exitoso, limpiando estado...');
         clearAfterRegister();
-        print('✅ Register successful');
+        print('✅ Register successful, estado limpiado');
         return true;
       } else if (response.statusCode == 409) {
         _setError('El nombre de usuario ya existe');
@@ -197,6 +199,7 @@ class AuthService extends ChangeNotifier {
     } finally {
       // Asegurar que el loading se detenga en caso de error
       if (_isLoading) {
+        print('🔧 Deteniendo loading en finally block');
         _setLoading(false);
       }
     }
@@ -212,9 +215,11 @@ class AuthService extends ChangeNotifier {
 
   /// Limpia el estado después del registro exitoso
   void clearAfterRegister() {
+    print('🧹 clearAfterRegister() ejecutándose...');
     _isLoading = false;
     _clearError();
     notifyListeners();
+    print('🧹 Estado limpiado, notificando listeners');
   }
 
   /// Obtiene los headers de autorización para las peticiones

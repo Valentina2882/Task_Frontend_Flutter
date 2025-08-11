@@ -95,11 +95,12 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    // Para pantallas que no requieren autenticación, mostrar directamente
+    // Para pantallas que no requieren autenticación, mostrar directamente sin verificación
     if (!widget.requireAuth) {
       return widget.child;
     }
 
+    // Para pantallas que requieren autenticación, mostrar pantalla de carga mientras se verifica
     if (_isChecking) {
       return Scaffold(
         body: Center(
@@ -117,8 +118,15 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
     return Consumer<AuthService>(
       builder: (context, authService, child) {
-        // Si requiere autenticación pero no está autenticado, mostrar pantalla de carga
+        // Si requiere autenticación pero no está autenticado, redirigir
         if (!authService.isAuthenticated) {
+          // Programar redirección para el siguiente frame
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              Navigator.of(context).pushReplacementNamed('/login');
+            }
+          });
+          
           return Scaffold(
             body: Center(
               child: Column(

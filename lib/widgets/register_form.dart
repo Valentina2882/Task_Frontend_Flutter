@@ -30,12 +30,18 @@ class _RegisterFormState extends State<RegisterForm> {
     if (_formKey.currentState!.validate()) {
       final authService = Provider.of<AuthService>(context, listen: false);
       
+      print('🚀 Iniciando registro...');
+      
       final success = await authService.register(
         _usernameController.text.trim(),
         _passwordController.text,
       );
 
+      print('📋 Resultado del registro: $success');
+
       if (success && context.mounted) {
+        print('✅ Registro exitoso, mostrando mensaje...');
+        
         // Mostrar mensaje de éxito
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -45,14 +51,26 @@ class _RegisterFormState extends State<RegisterForm> {
           ),
         );
         
+        print('⏳ Esperando 1.5 segundos...');
         // Esperar un momento y luego redirigir al login
         await Future.delayed(Duration(milliseconds: 1500));
         
+        print('🔄 Redirigiendo al login...');
         // Redirigir al login después del registro exitoso
         if (context.mounted) {
-          _navigateToLogin();
+          try {
+            Navigator.of(context).pushReplacementNamed('/login');
+            print('✅ Navegación exitosa');
+          } catch (e) {
+            print('❌ Error en navegación: $e');
+            // Fallback
+            navigatorKey.currentState?.pushReplacementNamed('/login');
+          }
+        } else {
+          print('❌ Context no está montado');
         }
       } else if (!success && context.mounted) {
+        print('❌ Registro fallido: ${authService.error}');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(authService.error ?? 'Error en el registro'),
@@ -60,24 +78,6 @@ class _RegisterFormState extends State<RegisterForm> {
           ),
         );
       }
-    }
-  }
-
-  /// Método para navegar al login de manera segura
-  void _navigateToLogin() {
-    try {
-      // Intentar navegar usando el Navigator del contexto
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        '/login',
-        (route) => false,
-      );
-    } catch (e) {
-      print('Error navegando al login: $e');
-      // Fallback: usar el navigatorKey global
-      navigatorKey.currentState?.pushNamedAndRemoveUntil(
-        '/login',
-        (route) => false,
-      );
     }
   }
 
