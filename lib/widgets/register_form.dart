@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import '../services/auth_service.dart';
 import '../utils/navigation.dart';
 
@@ -37,23 +39,62 @@ class _RegisterFormState extends State<RegisterForm> {
       final authService = Provider.of<AuthService>(context, listen: false);
       print('🚀 Iniciando registro...');
       try {
-        // Hacer la petición HTTP directamente sin usar el AuthService
+        // Hacer la petición HTTP directamente sin usar el AuthService problemático
         final url = 'https://taskbackendnestjs-production.up.railway.app/auth/signup';
-        final body = '{"username":"${_usernameController.text.trim()}","password":"${_passwordController.text}"}';
+        final body = json.encode({
+          'username': _usernameController.text.trim(),
+          'password': _passwordController.text,
+        });
         
         print('📝 Haciendo petición directa a: $url');
         print('📤 Body: $body');
         
-        // Simular un delay y mostrar éxito directo (WORKAROUND)
-        await Future.delayed(Duration(milliseconds: 500));
+        final response = await http.post(
+          Uri.parse(url),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: body,
+        );
         
-        print('✅ Simulando registro exitoso');
-        if (mounted) {
+        print('📥 Response status: ${response.statusCode}');
+        print('📥 Response body: ${response.body}');
+        
+        if (response.statusCode == 201) {
+          print('✅ Registro HTTP exitoso');
+          if (mounted) {
+            setState(() {
+              _registroExitoso = true;
+              _isLoading = false;
+            });
+            print('✅ RegisterForm: Estado actualizado a éxito');
+          }
+        } else if (response.statusCode == 409) {
+          print('❌ Usuario ya existe');
           setState(() {
-            _registroExitoso = true;
             _isLoading = false;
           });
-          print('✅ RegisterForm: Estado actualizado a éxito');
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('El nombre de usuario ya existe'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        } else {
+          print('❌ Error en registro: ${response.statusCode}');
+          setState(() {
+            _isLoading = false;
+          });
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Error en el registro: ${response.statusCode}'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
         }
       } catch (e) {
         print('❌ Error en el proceso de registro: $e');
