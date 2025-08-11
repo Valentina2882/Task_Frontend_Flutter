@@ -164,6 +164,21 @@ class _RegisterFormState extends State<RegisterForm> {
                 },
                 child: Text('Ir a iniciar sesión'),
               ),
+              SizedBox(height: 32),
+              Container(
+                padding: EdgeInsets.all(16),
+                margin: EdgeInsets.symmetric(horizontal: 24),
+                decoration: BoxDecoration(
+                  color: Colors.yellow[100],
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.amber, width: 1.5),
+                ),
+                child: Text(
+                  'Nota: Si usas la versión desplegada en Vercel, la navegación automática puede no funcionar correctamente. Por favor, navega manualmente al login si no eres redirigido.',
+                  style: TextStyle(color: Colors.black87, fontSize: 15),
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ],
           ),
         ),
