@@ -207,7 +207,7 @@ Aplicación de gestión de tareas construida con Flutter Web.
 
 ### Pasos para desplegar:
 
-1. **Preparar el proyecto**:
+1. **Preparar el proyecto localmente**:
    ```bash
    # Asegúrate de estar en la carpeta frontend_tasks
    cd frontend_tasks
@@ -217,6 +217,10 @@ Aplicación de gestión de tareas construida con Flutter Web.
    
    # Compilar para web
    flutter build web --release
+   
+   # Preparar archivos para Vercel
+   chmod +x prepare-for-vercel.sh
+   ./prepare-for-vercel.sh
    ```
 
 2. **Conectar con Vercel**:
@@ -225,13 +229,13 @@ Aplicación de gestión de tareas construida con Flutter Web.
    - Selecciona la carpeta `frontend_tasks`
    - En la configuración del proyecto, asegúrate de que:
      - **Framework Preset**: Other
-     - **Build Command**: `chmod +x build.sh && ./build.sh`
+     - **Build Command**: `echo 'No build needed'`
      - **Output Directory**: `public`
      - **Install Command**: (dejar vacío)
 
 3. **Configuración automática**:
    - Vercel usará el `vercel.json` incluido
-   - El script de build creará el directorio `public`
+   - Los archivos ya están pre-compilados en el directorio `public`
    - La aplicación estará disponible en tu dominio de Vercel
 
 ### 📁 Archivos de configuración:
