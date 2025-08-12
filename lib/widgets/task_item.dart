@@ -12,10 +12,10 @@ class TaskItem extends StatelessWidget {
   final VoidCallback onTaskUpdated;
 
   const TaskItem({
-    Key? key,
+    super.key,
     required this.task,
     required this.onTaskUpdated,
-  }) : super(key: key);
+  });
 
   /// Actualiza el estado de una tarea
   Future<void> _updateTaskStatus(TaskStatus newStatus) async {
@@ -30,7 +30,7 @@ class TaskItem extends StatelessWidget {
 
     if (success != null) {
       ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Estado actualizado'),
           backgroundColor: Colors.green,
         ),
@@ -51,17 +51,17 @@ class TaskItem extends StatelessWidget {
     final confirmed = await showDialog<bool>(
       context: navigatorKey.currentContext!,
       builder: (context) => AlertDialog(
-        title: Text('Eliminar Tarea'),
-        content: Text('¿Estás seguro de que quieres eliminar esta tarea?'),
+        title: const Text('Eliminar Tarea'),
+        content: const Text('¿Estás seguro de que quieres eliminar esta tarea?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text('Cancelar'),
+            child: const Text('Cancelar'),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: Text('Eliminar'),
+            child: const Text('Eliminar'),
           ),
         ],
       ),
@@ -75,7 +75,7 @@ class TaskItem extends StatelessWidget {
 
       if (success) {
         ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Tarea eliminada'),
             backgroundColor: Colors.green,
           ),
@@ -100,7 +100,7 @@ class TaskItem extends StatelessWidget {
     return Consumer<ThemeService>(
       builder: (context, themeService, child) {
         return Card(
-          margin: EdgeInsets.only(bottom: 12),
+          margin: const EdgeInsets.only(bottom: 12),
           elevation: 4,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
@@ -120,7 +120,7 @@ class TaskItem extends StatelessWidget {
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   task.description,
                   style: TextStyle(
@@ -128,7 +128,7 @@ class TaskItem extends StatelessWidget {
                     color: Colors.black54,
                   ),
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: isSmallScreen ? 10 : 12,
@@ -139,9 +139,9 @@ class TaskItem extends StatelessWidget {
                     borderRadius: BorderRadius.circular(isSmallScreen ? 15 : 20),
                     boxShadow: [
                       BoxShadow(
-                        color: _getStatusColor(task.status, themeService).withOpacity(0.3),
+                        color: _getStatusColor(task.status, themeService).withValues(alpha: 0.3),
                         blurRadius: 8,
-                        offset: Offset(0, 2),
+                        offset: const Offset(0, 2),
                       ),
                     ],
                   ),
@@ -153,12 +153,12 @@ class TaskItem extends StatelessWidget {
                         color: Colors.white,
                         size: isSmallScreen ? 16 : 18,
                       ),
-                      SizedBox(width: 6),
+                      const SizedBox(width: 6),
                       Text(
                         task.status.displayName,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
-                          fontSize: isSmallScreen ? 12 : 14,
+                          fontSize: 14,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -187,7 +187,7 @@ class TaskItem extends StatelessWidget {
                         color: _getStatusColor(status, themeService),
                         size: isSmallScreen ? 18 : 20,
                       ),
-                      SizedBox(width: 12),
+                      const SizedBox(width: 12),
                       Text(
                         'Marcar como ${status.displayName}',
                         style: TextStyle(
@@ -199,22 +199,22 @@ class TaskItem extends StatelessWidget {
                     ],
                   ),
                 )),
-                PopupMenuDivider(),
-                PopupMenuItem<dynamic>(
+                const PopupMenuDivider(),
+                const PopupMenuItem<dynamic>(
                   value: 'delete',
                   child: Row(
                     children: [
                       Icon(
                         Icons.delete_outline,
                         color: Colors.red,
-                        size: isSmallScreen ? 18 : 20,
+                        size: 20,
                       ),
                       SizedBox(width: 12),
                       Text(
                         'Eliminar',
                         style: TextStyle(
                           color: Colors.red,
-                          fontSize: isSmallScreen ? 14 : 16,
+                          fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -240,11 +240,11 @@ class TaskItem extends StatelessWidget {
   Color _getStatusColor(TaskStatus status, ThemeService themeService) {
     switch (status) {
       case TaskStatus.OPEN:
-        return Color(0xFFE57373); // Rojo suave
+        return const Color(0xFFE57373); // Rojo suave
       case TaskStatus.IN_PROGRESS:
         return themeService.accentColor; // Usar color de acento del tema
       case TaskStatus.DONE:
-        return Color(0xFF81C784); // Verde suave
+        return const Color(0xFF81C784); // Verde suave
     }
   }
 

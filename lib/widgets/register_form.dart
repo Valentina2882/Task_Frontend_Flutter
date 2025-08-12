@@ -3,15 +3,16 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../services/auth_service.dart';
-import '../utils/navigation.dart';
 
 /// Widget que maneja el formulario de registro
 class RegisterForm extends StatefulWidget {
+  const RegisterForm({super.key});
+
   @override
-  _RegisterFormState createState() => _RegisterFormState();
+  RegisterFormState createState() => RegisterFormState();
 }
 
-class _RegisterFormState extends State<RegisterForm> {
+class RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -36,18 +37,14 @@ class _RegisterFormState extends State<RegisterForm> {
         _isLoading = true;
       });
       
-      final authService = Provider.of<AuthService>(context, listen: false);
-      print('🚀 Iniciando registro...');
+      Provider.of<AuthService>(context, listen: false);
       try {
         // Hacer la petición HTTP directamente sin usar el AuthService problemático
-        final url = 'https://taskbackendnestjs-production.up.railway.app/auth/signup';
+        const url = 'https://taskbackendnestjs-production.up.railway.app/auth/signup';
         final body = json.encode({
           'username': _usernameController.text.trim(),
           'password': _passwordController.text,
         });
-        
-        print('📝 Haciendo petición directa a: $url');
-        print('📤 Body: $body');
         
         final response = await http.post(
           Uri.parse(url),
@@ -57,37 +54,30 @@ class _RegisterFormState extends State<RegisterForm> {
           body: body,
         );
         
-        print('📥 Response status: ${response.statusCode}');
-        print('📥 Response body: ${response.body}');
-        
-        if (response.statusCode == 201) {
-          print('✅ Registro HTTP exitoso');
+        if (response.statusCode == 201){
           if (mounted) {
             setState(() {
               _registroExitoso = true;
               _isLoading = false;
             });
-            print('✅ RegisterForm: Estado actualizado a éxito');
           }
         } else if (response.statusCode == 409) {
-          print('❌ Usuario ya existe');
           setState(() {
             _isLoading = false;
           });
-          if (context.mounted) {
+          if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
+              const SnackBar(
                 content: Text('El nombre de usuario ya existe'),
                 backgroundColor: Colors.red,
               ),
             );
           }
         } else {
-          print('❌ Error en registro: ${response.statusCode}');
           setState(() {
             _isLoading = false;
           });
-          if (context.mounted) {
+          if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Error en el registro: ${response.statusCode}'),
@@ -97,11 +87,10 @@ class _RegisterFormState extends State<RegisterForm> {
           }
         }
       } catch (e) {
-        print('❌ Error en el proceso de registro: $e');
         setState(() {
           _isLoading = false;
         });
-        if (context.mounted) {
+        if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Error inesperado: $e'),
@@ -139,41 +128,39 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
-    print('🟢 Entrando al build. _registroExitoso=$_registroExitoso');
     final screenSize = MediaQuery.of(context).size;
     final isSmallScreen = screenSize.width < 400;
 
     if (_registroExitoso) {
-      print('🟢 Mostrando mensaje de éxito');
       return Scaffold(
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.check_circle_outline, color: Colors.green, size: 64),
-              SizedBox(height: 24),
-              Text(
+              const Icon(Icons.check_circle_outline, color: Colors.green, size: 64),
+              const SizedBox(height: 24),
+              const Text(
                 '¡Registro completado! Ahora puedes iniciar sesión.',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
                 },
-                child: Text('Ir a iniciar sesión'),
+                child: const Text('Ir a iniciar sesión'),
               ),
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
               Container(
-                padding: EdgeInsets.all(16),
-                margin: EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.symmetric(horizontal: 24),
                 decoration: BoxDecoration(
                   color: Colors.yellow[100],
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: Colors.amber, width: 1.5),
                 ),
-                child: Text(
+                child: const Text(
                   'Nota: Si usas la versión desplegada en Vercel, la navegación automática puede no funcionar correctamente. Por favor, navega manualmente al login si no eres redirigido.',
                   style: TextStyle(color: Colors.black87, fontSize: 15),
                   textAlign: TextAlign.center,
@@ -195,26 +182,26 @@ class _RegisterFormState extends State<RegisterForm> {
             enabled: !_registroExitoso,
             decoration: InputDecoration(
               labelText: 'Nombre de usuario',
-              labelStyle: TextStyle(
+              labelStyle: const TextStyle(
                 color: Colors.black54,
                 fontWeight: FontWeight.w500,
-                fontSize: isSmallScreen ? 14 : 16,
+                fontSize: 16,
               ),
-              prefixIcon: Icon(Icons.person, color: Colors.black54, size: isSmallScreen ? 20 : 24),
+              prefixIcon: const Icon(Icons.person, color: Colors.black54, size: 24),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
-                borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+                borderSide: const BorderSide(color: Colors.grey),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
-                borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+                borderSide: const BorderSide(color: Colors.grey),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
-                borderSide: BorderSide(color: Color(0xFF4A148C), width: 2),
+                borderSide: const BorderSide(color: Color(0xFF4A148C), width: 2),
               ),
               filled: true,
-              fillColor: Colors.white.withOpacity(0.9),
+              fillColor: Colors.white.withValues(alpha: 0.9),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: isSmallScreen ? 15 : 20, 
                 vertical: isSmallScreen ? 12 : 18
@@ -243,12 +230,12 @@ class _RegisterFormState extends State<RegisterForm> {
             enabled: !_registroExitoso,
             decoration: InputDecoration(
               labelText: 'Contraseña',
-              labelStyle: TextStyle(
+              labelStyle: const TextStyle(
                 color: Colors.black54,
                 fontWeight: FontWeight.w500,
-                fontSize: isSmallScreen ? 14 : 16,
+                fontSize: 16,
               ),
-              prefixIcon: Icon(Icons.lock, color: Colors.black54, size: isSmallScreen ? 20 : 24),
+              prefixIcon: const Icon(Icons.lock, color: Colors.black54, size: 24),
               suffixIcon: IconButton(
                 icon: Icon(
                   _obscurePassword ? Icons.visibility : Icons.visibility_off,
@@ -263,18 +250,18 @@ class _RegisterFormState extends State<RegisterForm> {
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
-                borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+                borderSide: const BorderSide(color: Colors.grey),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
-                borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+                borderSide: const BorderSide(color: Colors.grey),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
-                borderSide: BorderSide(color: Color(0xFF4A148C), width: 2),
+                borderSide: const BorderSide(color: Color(0xFF4A148C), width: 2),
               ),
               filled: true,
-              fillColor: Colors.white.withOpacity(0.9),
+              fillColor: Colors.white.withValues(alpha: 0.9),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: isSmallScreen ? 15 : 20, 
                 vertical: isSmallScreen ? 12 : 18
@@ -292,12 +279,12 @@ class _RegisterFormState extends State<RegisterForm> {
             enabled: !_registroExitoso,
             decoration: InputDecoration(
               labelText: 'Confirmar contraseña',
-              labelStyle: TextStyle(
+              labelStyle: const TextStyle(
                 color: Colors.black54,
                 fontWeight: FontWeight.w500,
-                fontSize: isSmallScreen ? 14 : 16,
+                fontSize: 16,
               ),
-              prefixIcon: Icon(Icons.lock_outline, color: Colors.black54, size: isSmallScreen ? 20 : 24),
+              prefixIcon: const Icon(Icons.lock_outline, color: Colors.black54, size: 24),
               suffixIcon: IconButton(
                 icon: Icon(
                   _obscureConfirmPassword ? Icons.visibility : Icons.visibility_off,
@@ -312,18 +299,18 @@ class _RegisterFormState extends State<RegisterForm> {
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
-                borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+                borderSide: const BorderSide(color: Colors.grey),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
-                borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+                borderSide: const BorderSide(color: Colors.grey),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
-                borderSide: BorderSide(color: Color(0xFF4A148C), width: 2),
+                borderSide: const BorderSide(color: Color(0xFF4A148C), width: 2),
               ),
               filled: true,
-              fillColor: Colors.white.withOpacity(0.9),
+              fillColor: Colors.white.withValues(alpha: 0.9),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: isSmallScreen ? 15 : 20, 
                 vertical: isSmallScreen ? 12 : 18
@@ -347,7 +334,7 @@ class _RegisterFormState extends State<RegisterForm> {
             width: double.infinity,
             height: isSmallScreen ? 45 : 55,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
+              gradient: const LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
@@ -359,9 +346,9 @@ class _RegisterFormState extends State<RegisterForm> {
               borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
               boxShadow: [
                 BoxShadow(
-                  color: Color(0xFF4A148C).withOpacity(0.3),
+                  color: const Color(0xFF4A148C).withValues(alpha: 0.3),
                   blurRadius: 10,
-                  offset: Offset(0, 5),
+                  offset: const Offset(0, 5),
                 ),
               ],
             ),
@@ -375,14 +362,14 @@ class _RegisterFormState extends State<RegisterForm> {
                 ),
               ),
               child: _isLoading
-                  ? CircularProgressIndicator(
+                  ? const CircularProgressIndicator(
                       color: Colors.white,
                       strokeWidth: 3,
                     )
-                  : Text(
+                  : const Text(
                       '✨ Registrarse',
                       style: TextStyle(
-                        fontSize: isSmallScreen ? 16 : 18,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),

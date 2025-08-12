@@ -16,7 +16,7 @@ class AuthUtils {
     
     // Verificar con el backend
     final isValid = await authService.verifyTokenWithBackend();
-    if (!isValid) {
+    if (!isValid && context.mounted) {
       _showAuthDialog(context, 'Token inválido', 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
       return false;
     }
@@ -38,7 +38,7 @@ class AuthUtils {
               Navigator.of(context).pop();
               navigatorKey.currentState?.pushReplacementNamed('/login');
             },
-            child: Text('OK'),
+            child: const Text('OK'),
           ),
         ],
       ),
@@ -75,7 +75,9 @@ class AuthUtils {
     try {
       return await operation();
     } catch (e) {
-      handleAuthError(context, e);
+      if (context.mounted) {
+        handleAuthError(context, e);
+      }
       return null;
     }
   }

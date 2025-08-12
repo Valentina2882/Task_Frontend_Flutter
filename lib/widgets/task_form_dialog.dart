@@ -8,10 +8,10 @@ class TaskFormDialog extends StatefulWidget {
   const TaskFormDialog({super.key, this.initial, required this.onSubmit});
 
   @override
-  State<TaskFormDialog> createState() => _TaskFormDialogState();
+  State<TaskFormDialog> createState() => TaskFormDialogState();
 }
 
-class _TaskFormDialogState extends State<TaskFormDialog> {
+class TaskFormDialogState extends State<TaskFormDialog> {
   late final TextEditingController titleController;
   late final TextEditingController descriptionController;
   late TaskStatus status;
@@ -97,7 +97,7 @@ class _TaskFormDialogState extends State<TaskFormDialog> {
                 title: title,
                 description: description.isEmpty ? 'Sin descripción' : description,
                 status: status,
-                userId: 1, // TODO: Obtener del usuario actual
+                userId: 1,
               );
 
               await widget.onSubmit(task);

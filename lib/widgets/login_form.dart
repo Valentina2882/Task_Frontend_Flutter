@@ -4,11 +4,13 @@ import '../services/auth_service.dart';
 
 /// Widget que maneja el formulario de inicio de sesión
 class LoginForm extends StatefulWidget {
+  const LoginForm({super.key});
+
   @override
-  _LoginFormState createState() => _LoginFormState();
+  LoginFormState createState() => LoginFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -32,14 +34,18 @@ class _LoginFormState extends State<LoginForm> {
       );
 
       if (success) {
-        Navigator.pushReplacementNamed(context, '/home');
+        if (mounted) {
+          Navigator.pushReplacementNamed(context, '/home');
+        }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(authService.error ?? 'Error en el login'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(authService.error ?? 'Error en el login'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       }
     }
   }
@@ -58,26 +64,26 @@ class _LoginFormState extends State<LoginForm> {
             controller: _usernameController,
             decoration: InputDecoration(
               labelText: 'Nombre de usuario',
-              labelStyle: TextStyle(
+              labelStyle: const TextStyle(
                 color: Colors.black54,
                 fontWeight: FontWeight.w500,
-                fontSize: isSmallScreen ? 14 : 16,
+                fontSize: 16,
               ),
-              prefixIcon: Icon(Icons.person, color: Colors.black54, size: isSmallScreen ? 20 : 24),
+              prefixIcon: const Icon(Icons.person, color: Colors.black54, size: 24),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
-                borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+                borderSide: const BorderSide(color: Colors.grey),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
-                borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+                borderSide: const BorderSide(color: Colors.grey),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
-                borderSide: BorderSide(color: Color(0xFF4A148C), width: 2),
+                borderSide: const BorderSide(color: Color(0xFF4A148C), width: 2),
               ),
               filled: true,
-              fillColor: Colors.white.withOpacity(0.9),
+              fillColor: Colors.white.withValues(alpha: 0.9),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: isSmallScreen ? 15 : 20, 
                 vertical: isSmallScreen ? 12 : 18
@@ -102,12 +108,12 @@ class _LoginFormState extends State<LoginForm> {
             obscureText: _obscurePassword,
             decoration: InputDecoration(
               labelText: 'Contraseña',
-              labelStyle: TextStyle(
+              labelStyle: const TextStyle(
                 color: Colors.black54,
                 fontWeight: FontWeight.w500,
-                fontSize: isSmallScreen ? 14 : 16,
+                fontSize: 16,
               ),
-              prefixIcon: Icon(Icons.lock, color: Colors.black54, size: isSmallScreen ? 20 : 24),
+              prefixIcon: const Icon(Icons.lock, color: Colors.black54, size: 24),
               suffixIcon: IconButton(
                 icon: Icon(
                   _obscurePassword ? Icons.visibility : Icons.visibility_off,
@@ -122,18 +128,18 @@ class _LoginFormState extends State<LoginForm> {
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
-                borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+                borderSide: const BorderSide(color: Colors.grey),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
-                borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+                borderSide: const BorderSide(color: Colors.grey),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
-                borderSide: BorderSide(color: Color(0xFF4A148C), width: 2),
+                borderSide: const BorderSide(color: Color(0xFF4A148C), width: 2),
               ),
               filled: true,
-              fillColor: Colors.white.withOpacity(0.9),
+              fillColor: Colors.white.withValues(alpha: 0.9),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: isSmallScreen ? 15 : 20, 
                 vertical: isSmallScreen ? 12 : 18
@@ -159,7 +165,7 @@ class _LoginFormState extends State<LoginForm> {
                 width: double.infinity,
                 height: isSmallScreen ? 45 : 55,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
+                  gradient: const LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
@@ -171,9 +177,9 @@ class _LoginFormState extends State<LoginForm> {
                   borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
                   boxShadow: [
                     BoxShadow(
-                      color: Color(0xFF4A148C).withOpacity(0.3),
+                      color: const Color(0xFF4A148C).withValues(alpha: 0.3),
                       blurRadius: 10,
-                      offset: Offset(0, 5),
+                      offset: const Offset(0, 5),
                     ),
                   ],
                 ),
@@ -187,14 +193,14 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                   ),
                   child: authService.isLoading
-                      ? CircularProgressIndicator(
+                      ? const CircularProgressIndicator(
                           color: Colors.white,
                           strokeWidth: 3,
                         )
-                      : Text(
+                      : const Text(
                           '🚀 Iniciar Sesión',
                           style: TextStyle(
-                            fontSize: isSmallScreen ? 16 : 18,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),

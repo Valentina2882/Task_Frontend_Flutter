@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_service.dart';
-import '../services/task_service.dart';
 import '../services/theme_service.dart';
 import '../widgets/task_filters.dart';
 import '../widgets/task_list.dart';
 import '../widgets/create_task_dialog.dart';
 import '../widgets/gradient_background.dart';
-import '../models/task.dart';
 
 /// Pantalla principal de la aplicación
 /// Muestra la lista de tareas y permite gestionarlas
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   void _showThemeSelector(BuildContext context) {
     final themeService = Provider.of<ThemeService>(context, listen: false);
     
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Seleccionar Tema'),
-        content: Container(
+        title: const Text('Seleccionar Tema'),
+        content: SizedBox(
           width: double.maxFinite,
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -29,7 +29,7 @@ class HomeScreen extends StatelessWidget {
               final isSelected = index == themeService.currentThemeIndex;
               
               return Container(
-                margin: EdgeInsets.only(bottom: 8),
+                margin: const EdgeInsets.only(bottom: 8),
                 child: ListTile(
                   leading: Container(
                     width: 40,
@@ -62,7 +62,7 @@ class HomeScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancelar'),
+            child: const Text('Cancelar'),
           ),
         ],
       ),
@@ -121,7 +121,7 @@ class HomeScreen extends StatelessWidget {
                                 minHeight: isSmallScreen ? 36 : 40,
                               ),
                             ),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             // Botón de logout
                             IconButton(
                               onPressed: () {
@@ -153,25 +153,25 @@ class HomeScreen extends StatelessWidget {
                         horizontal: isSmallScreen ? 10 : 20
                       ),
                       decoration: BoxDecoration(
-                        color: Color(0xFFF5F5F5).withOpacity(0.95),
+                        color: const Color(0xFFF5F5F5).withValues(alpha: 0.95),
                         borderRadius: BorderRadius.circular(
                           isSmallScreen ? 20 : 25
                         ),
                         border: Border.all(
-                          color: Colors.white.withOpacity(0.3),
+                          color: Colors.white.withValues(alpha: 0.3),
                           width: 1.5,
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.15),
+                            color: Colors.black.withValues(alpha: 0.15),
                             blurRadius: 20,
-                            offset: Offset(0, 10),
+                            offset: const Offset(0, 10),
                             spreadRadius: 2,
                           ),
                           BoxShadow(
-                            color: Colors.white.withOpacity(0.1),
+                            color: Colors.white.withValues(alpha: 0.1),
                             blurRadius: 10,
-                            offset: Offset(0, -5),
+                            offset: const Offset(0, -5),
                           ),
                         ],
                       ),
@@ -180,7 +180,7 @@ class HomeScreen extends StatelessWidget {
                           // Filtros de tareas
                           Padding(
                             padding: EdgeInsets.all(isSmallScreen ? 15 : 20),
-                            child: TaskFilters(),
+                            child: const TaskFilters(),
                           ),
                           
                           // Lista de tareas con scroll
@@ -189,7 +189,7 @@ class HomeScreen extends StatelessWidget {
                               padding: EdgeInsets.symmetric(
                                 horizontal: isSmallScreen ? 15 : 20
                               ),
-                              child: TaskList(),
+                              child: const TaskList(),
                             ),
                           ),
                           
@@ -208,7 +208,7 @@ class HomeScreen extends StatelessWidget {
             onPressed: () {
               showDialog(
                 context: context,
-                builder: (context) => CreateTaskDialog(),
+                builder: (context) => const CreateTaskDialog(),
               );
             },
             icon: Icon(Icons.add, size: isSmallScreen ? 20 : 24),

@@ -8,17 +8,17 @@ class GradientBackground extends StatefulWidget {
   final List<Color>? colors;
 
   const GradientBackground({
-    Key? key,
+    super.key,
     required this.child,
     this.padding,
     this.colors,
-  }) : super(key: key);
+  });
 
   @override
-  _GradientBackgroundState createState() => _GradientBackgroundState();
+  GradientBackgroundState createState() => GradientBackgroundState();
 }
 
-class _GradientBackgroundState extends State<GradientBackground>
+class GradientBackgroundState extends State<GradientBackground>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
@@ -27,7 +27,7 @@ class _GradientBackgroundState extends State<GradientBackground>
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: Duration(seconds: 3),
+      duration: const Duration(seconds: 3),
       vsync: this,
     );
     _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -46,11 +46,11 @@ class _GradientBackgroundState extends State<GradientBackground>
   Widget build(BuildContext context) {
     // Colores por defecto (morado) si no se proporcionan
     final defaultColors = [
-      Color(0xFF4A148C), // Morado muy oscuro
-      Color(0xFF6A1B9A), // Morado oscuro
-      Color(0xFF8E24AA), // Morado medio
-      Color(0xFFAB47BC), // Morado claro
-      Color(0xFFBA68C8), // Morado muy claro
+      const Color(0xFF4A148C), // Morado muy oscuro
+      const Color(0xFF6A1B9A), // Morado oscuro
+      const Color(0xFF8E24AA), // Morado medio
+      const Color(0xFFAB47BC), // Morado claro
+      const Color(0xFFBA68C8), // Morado muy claro
     ];
     
     final colors = widget.colors ?? defaultColors;
@@ -66,7 +66,7 @@ class _GradientBackgroundState extends State<GradientBackground>
               colors: colors,
               stops: colors.length > 1 
                 ? List.generate(colors.length, (index) => index / (colors.length - 1))
-                : [0.0, 1.0],
+                : const [0.0, 1.0],
             ),
           ),
           child: Stack(
@@ -80,7 +80,7 @@ class _GradientBackgroundState extends State<GradientBackground>
               // Contenido principal
               SafeArea(
                 child: Padding(
-                  padding: widget.padding ?? EdgeInsets.all(20),
+                  padding: widget.padding ?? const EdgeInsets.all(20),
                   child: widget.child,
                 ),
               ),
@@ -101,7 +101,7 @@ class ParticlePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.white.withOpacity(0.1)
+      ..color = Colors.white.withValues(alpha: 0.1)
       ..style = PaintingStyle.fill;
 
     // Dibujar partículas animadas

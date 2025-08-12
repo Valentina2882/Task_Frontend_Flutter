@@ -10,10 +10,10 @@ class AuthWrapper extends StatefulWidget {
   final bool requireAuth;
 
   const AuthWrapper({
-    Key? key,
+    super.key,
     required this.child,
     this.requireAuth = true,
-  }) : super(key: key);
+  });
 
   @override
   State<AuthWrapper> createState() => _AuthWrapperState();
@@ -102,7 +102,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
     // Para pantallas que requieren autenticación, mostrar pantalla de carga mientras se verifica
     if (_isChecking) {
-      return Scaffold(
+      return const Scaffold(
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -127,7 +127,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
             }
           });
           
-          return Scaffold(
+          return const Scaffold(
             body: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

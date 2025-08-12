@@ -7,11 +7,13 @@ import '../models/task.dart';
 
 /// Widget que maneja los filtros y búsqueda de tareas con efectos visuales
 class TaskFilters extends StatefulWidget {
+  const TaskFilters({super.key});
+
   @override
-  _TaskFiltersState createState() => _TaskFiltersState();
+  TaskFiltersState createState() => TaskFiltersState();
 }
 
-class _TaskFiltersState extends State<TaskFilters>
+class TaskFiltersState extends State<TaskFilters>
     with TickerProviderStateMixin {
   String _searchQuery = '';
   TaskStatus? _filterStatus;
@@ -23,7 +25,7 @@ class _TaskFiltersState extends State<TaskFilters>
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 800),
       vsync: this,
     );
     
@@ -86,12 +88,12 @@ class _TaskFiltersState extends State<TaskFilters>
 
   /// Obtiene colores claros del tema
   Color _getLightThemeColor(ThemeService themeService, {double opacity = 0.1}) {
-    return themeService.primaryColor.withOpacity(opacity);
+    return themeService.primaryColor.withValues(alpha: opacity);
   }
 
   /// Obtiene colores medios del tema
   Color _getMediumThemeColor(ThemeService themeService, {double opacity = 0.3}) {
-    return themeService.primaryColor.withOpacity(opacity);
+    return themeService.primaryColor.withValues(alpha: opacity);
   }
 
   @override
@@ -127,12 +129,12 @@ class _TaskFiltersState extends State<TaskFilters>
                      ),
                      boxShadow: [
                        BoxShadow(
-                         color: Colors.black.withOpacity(0.1),
+                         color: Colors.black.withValues(alpha: 0.1),
                          blurRadius: isVerySmallScreen ? 10 : 15,
                          offset: Offset(0, isVerySmallScreen ? 5 : 8),
                        ),
                        BoxShadow(
-                         color: Colors.white.withOpacity(0.1),
+                         color: Colors.white.withValues(alpha: 0.1),
                          blurRadius: isVerySmallScreen ? 8 : 10,
                          offset: Offset(0, isVerySmallScreen ? -3 : -5),
                        ),
@@ -146,7 +148,7 @@ class _TaskFiltersState extends State<TaskFilters>
                            borderRadius: BorderRadius.circular(isVerySmallScreen ? 10 : isSmallScreen ? 12 : 15),
                            boxShadow: [
                              BoxShadow(
-                               color: Colors.black.withOpacity(0.1),
+                               color: Colors.black.withValues(alpha: 0.1),
                                blurRadius: isVerySmallScreen ? 8 : 10,
                                offset: Offset(0, isVerySmallScreen ? 3 : 5),
                              ),
@@ -156,13 +158,13 @@ class _TaskFiltersState extends State<TaskFilters>
                            decoration: InputDecoration(
                              labelText: isVerySmallScreen ? 'Buscar' : 'Buscar tareas',
                              labelStyle: TextStyle(
-                               color: themeService.primaryColor.withOpacity(0.7),
+                               color: themeService.primaryColor.withValues(alpha: 0.7),
                                fontWeight: FontWeight.w500,
                                fontSize: isVerySmallScreen ? 12 : isSmallScreen ? 14 : 16,
                              ),
                              prefixIcon: Icon(
                                Icons.search,
-                               color: themeService.primaryColor.withOpacity(0.6),
+                               color: themeService.primaryColor.withValues(alpha: 0.6),
                                size: isVerySmallScreen ? 18 : isSmallScreen ? 20 : 24,
                              ),
                              border: OutlineInputBorder(
@@ -178,14 +180,14 @@ class _TaskFiltersState extends State<TaskFilters>
                                borderSide: BorderSide(color: themeService.primaryColor, width: 2),
                              ),
                              filled: true,
-                             fillColor: Colors.white.withOpacity(0.9),
+                             fillColor: Colors.white.withValues(alpha: 0.9),
                              contentPadding: EdgeInsets.symmetric(
                                horizontal: isVerySmallScreen ? 12 : isSmallScreen ? 15 : 20, 
                                vertical: isVerySmallScreen ? 10 : isSmallScreen ? 12 : 15
                              ),
                            ),
                            style: TextStyle(
-                             color: themeService.primaryColor.withOpacity(0.8),
+                             color: themeService.primaryColor.withValues(alpha: 0.8),
                              fontSize: isVerySmallScreen ? 12 : isSmallScreen ? 14 : 16,
                            ),
                            onChanged: _onSearchChanged,
@@ -203,7 +205,7 @@ class _TaskFiltersState extends State<TaskFilters>
                                children: [
                                  Icon(
                                    Icons.filter_list,
-                                   color: themeService.primaryColor.withOpacity(0.6),
+                                   color: themeService.primaryColor.withValues(alpha: 0.6),
                                    size: isVerySmallScreen ? 18 : isSmallScreen ? 20 : 24,
                                  ),
                                  SizedBox(width: isVerySmallScreen ? 6 : isSmallScreen ? 8 : 10),
@@ -211,7 +213,7 @@ class _TaskFiltersState extends State<TaskFilters>
                                    child: Text(
                                      isVerySmallScreen ? 'Filtrar estado:' : 'Filtrar por estado:',
                                      style: TextStyle(
-                                       color: themeService.primaryColor.withOpacity(0.8),
+                                      color: themeService.primaryColor.withValues(alpha: 0.8),
                                        fontSize: isVerySmallScreen ? 12 : isSmallScreen ? 14 : 16,
                                        fontWeight: FontWeight.w600,
                                      ),
@@ -223,7 +225,7 @@ class _TaskFiltersState extends State<TaskFilters>
                                  PopupMenuButton<TaskStatus?>(
                                    icon: Icon(
                                      Icons.arrow_drop_down,
-                                     color: themeService.primaryColor.withOpacity(0.6),
+                                     color: themeService.primaryColor.withValues(alpha: 0.6),
                                      size: isVerySmallScreen ? 20 : isSmallScreen ? 24 : 28,
                                    ),
                                   onSelected: _onFilterChanged,
@@ -285,10 +287,10 @@ class _TaskFiltersState extends State<TaskFilters>
                                    vertical: isVerySmallScreen ? 4 : isSmallScreen ? 6 : 8,
                                  ),
                                  decoration: BoxDecoration(
-                                   color: _getStatusColor(_filterStatus!, themeService).withOpacity(0.2),
+                                   color: _getStatusColor(_filterStatus!, themeService).withValues(alpha: 0.2),
                                    borderRadius: BorderRadius.circular(isVerySmallScreen ? 8 : isSmallScreen ? 10 : 12),
                                    border: Border.all(
-                                     color: _getStatusColor(_filterStatus!, themeService).withOpacity(0.5),
+                                     color: _getStatusColor(_filterStatus!, themeService).withValues(alpha: 0.5),
                                      width: 1,
                                    ),
                                  ),
@@ -351,11 +353,11 @@ class _TaskFiltersState extends State<TaskFilters>
   Color _getStatusColor(TaskStatus status, ThemeService themeService) {
     switch (status) {
       case TaskStatus.OPEN:
-        return Color(0xFFE57373); // Rojo suave
+        return const Color(0xFFE57373); // Rojo suave
       case TaskStatus.IN_PROGRESS:
         return themeService.accentColor; // Usar color de acento del tema
       case TaskStatus.DONE:
-        return Color(0xFF81C784); // Verde suave
+        return const Color(0xFF81C784); // Verde suave
     }
   }
 }

@@ -8,17 +8,17 @@ class AppHeader extends StatefulWidget {
   final IconData? icon;
 
   const AppHeader({
-    Key? key,
+    super.key,
     required this.title,
     this.subtitle,
     this.icon,
-  }) : super(key: key);
+  });
 
   @override
-  _AppHeaderState createState() => _AppHeaderState();
+  AppHeaderState createState() => AppHeaderState();
 }
 
-class _AppHeaderState extends State<AppHeader>
+class AppHeaderState extends State<AppHeader>
     with TickerProviderStateMixin {
   late AnimationController _iconController;
   late AnimationController _textController;
@@ -32,12 +32,12 @@ class _AppHeaderState extends State<AppHeader>
     super.initState();
     
     _iconController = AnimationController(
-      duration: Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
     
     _textController = AnimationController(
-      duration: Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 1000),
       vsync: this,
     );
 
@@ -74,7 +74,7 @@ class _AppHeaderState extends State<AppHeader>
     ));
 
     _iconController.forward();
-    Future.delayed(Duration(milliseconds: 300), () {
+    Future.delayed(const Duration(milliseconds: 300), () {
       _textController.forward();
     });
   }
@@ -99,38 +99,38 @@ class _AppHeaderState extends State<AppHeader>
               child: Transform.rotate(
                 angle: _iconRotationAnimation.value * 2 * 3.14159,
                 child: Container(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        Color(0xFFF5F5F5).withOpacity(0.3),
-                        Color(0xFFF5F5F5).withOpacity(0.1),
+                        const Color(0xFFF5F5F5).withValues(alpha: 0.3),
+                        const Color(0xFFF5F5F5).withValues(alpha: 0.1),
                       ],
                     ),
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: Color(0xFFF5F5F5).withOpacity(0.5),
+                      color: const Color(0xFFF5F5F5).withValues(alpha: 0.5),
                       width: 2,
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 15,
-                        offset: Offset(0, 8),
+                        offset: const Offset(0, 8),
                       ),
                       BoxShadow(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withValues(alpha: 0.2),
                         blurRadius: 10,
-                        offset: Offset(0, -5),
+                        offset: const Offset(0, -5),
                       ),
                     ],
                   ),
                   child: Icon(
                     widget.icon ?? Icons.task_alt,
                     size: 50,
-                    color: Color(0xFFF5F5F5),
+                    color: const Color(0xFFF5F5F5),
                   ),
                 ),
               ),
@@ -138,7 +138,7 @@ class _AppHeaderState extends State<AppHeader>
           },
         ),
         
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         
         // Título con animación
         AnimatedBuilder(
@@ -157,14 +157,14 @@ class _AppHeaderState extends State<AppHeader>
                     letterSpacing: 1.2,
                     shadows: [
                       Shadow(
-                        offset: Offset(0, 2),
+                        offset: const Offset(0, 2),
                         blurRadius: 4,
-                        color: Colors.black.withOpacity(0.3),
+                        color: Colors.black.withValues(alpha: 0.3),
                       ),
                       Shadow(
-                        offset: Offset(0, 1),
+                        offset: const Offset(0, 1),
                         blurRadius: 2,
-                        color: Color(0xFF1B5E20).withOpacity(0.5),
+                        color: const Color(0xFF1B5E20).withValues(alpha: 0.5),
                       ),
                     ],
                   ),
@@ -177,7 +177,7 @@ class _AppHeaderState extends State<AppHeader>
         
         // Subtítulo (opcional) con animación
         if (widget.subtitle != null) ...[
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           AnimatedBuilder(
             animation: _textController,
             builder: (context, child) {
@@ -186,26 +186,26 @@ class _AppHeaderState extends State<AppHeader>
                 child: Opacity(
                   opacity: _textOpacityAnimation.value,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
+                      color: Colors.white.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withValues(alpha: 0.2),
                         width: 1,
                       ),
                     ),
                     child: Text(
                       widget.subtitle!,
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                         shadows: [
                           Shadow(
-                            offset: Offset(0, 1),
+                            offset: const Offset(0, 1),
                             blurRadius: 2,
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withValues(alpha: 0.2),
                           ),
                         ],
                       ),

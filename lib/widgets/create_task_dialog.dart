@@ -5,11 +5,13 @@ import '../services/auth_service.dart';
 
 /// Widget que maneja el diálogo para crear nuevas tareas
 class CreateTaskDialog extends StatefulWidget {
+  const CreateTaskDialog({super.key});
+
   @override
-  _CreateTaskDialogState createState() => _CreateTaskDialogState();
+  CreateTaskDialogState createState() => CreateTaskDialogState();
 }
 
-class _CreateTaskDialogState extends State<CreateTaskDialog> {
+class CreateTaskDialogState extends State<CreateTaskDialog> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
 
@@ -24,7 +26,7 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
   Future<void> _createTask() async {
     if (_titleController.text.isEmpty || _descriptionController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Por favor completa todos los campos'),
           backgroundColor: Colors.orange,
         ),
@@ -42,22 +44,26 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
     );
 
     if (success != null) {
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Tarea creada exitosamente'),
-          backgroundColor: Colors.green,
-        ),
-      );
+      if (mounted) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Tarea creada exitosamente'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
       // Recargar tareas
       taskService.getTasks(authService: authService);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(taskService.error ?? 'Error al crear la tarea'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(taskService.error ?? 'Error al crear la tarea'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -66,13 +72,13 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
     return Dialog(
       backgroundColor: Colors.transparent,
       child: Container(
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
+        padding: const EdgeInsets.all(20),
+        decoration: const BoxDecoration(
           color: Color(0xFFF5F5F5),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black26,
               blurRadius: 15,
               offset: Offset(0, 8),
             ),
@@ -82,7 +88,7 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             // Título del diálogo
-            Row(
+            const Row(
               children: [
                 Icon(
                   Icons.add_task,
@@ -101,48 +107,48 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
               ],
             ),
             
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
             
             // Campo de título
             TextField(
               controller: _titleController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Título',
                 labelStyle: TextStyle(color: Colors.black54),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
                   borderSide: BorderSide(color: Color(0xFF4A148C), width: 2),
                 ),
                 filled: true,
-                fillColor: Colors.white.withOpacity(0.8),
+                fillColor: Colors.white,
               ),
             ),
             
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             
             // Campo de descripción
             TextField(
               controller: _descriptionController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Descripción',
                 labelStyle: TextStyle(color: Colors.black54),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
                   borderSide: BorderSide(color: Color(0xFF4A148C), width: 2),
                 ),
                 filled: true,
-                fillColor: Colors.white.withOpacity(0.8),
+                fillColor: Colors.white,
               ),
               maxLines: 3,
             ),
             
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
             
             // Botones de acción
             Row(
@@ -150,7 +156,7 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
               children: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text(
+                  child: const Text(
                     'Cancelar',
                     style: TextStyle(
                       color: Colors.black54,
@@ -158,18 +164,18 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                     ),
                   ),
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 ElevatedButton(
                   onPressed: _createTask,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF4A148C),
+                    backgroundColor: const Color(0xFF4A148C),
                     foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Crear',
                     style: TextStyle(fontSize: 16),
                   ),

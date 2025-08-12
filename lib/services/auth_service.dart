@@ -46,7 +46,6 @@ class AuthService extends ChangeNotifier {
       
       return now.isAfter(expiry);
     } catch (e) {
-      print('❌ Error validando token: $e');
       return true;
     }
   }
@@ -54,19 +53,16 @@ class AuthService extends ChangeNotifier {
   /// Valida el token actual y retorna true si es válido
   bool validateToken() {
     if (_accessToken == null) {
-      print('❌ No hay token disponible');
       return false;
     }
     
     if (_isTokenExpired()) {
-      print('❌ Token expirado');
       _accessToken = null;
       _currentUser = null;
       notifyListeners();
       return false;
     }
     
-    print('✅ Token válido');
     return true;
   }
 
@@ -81,17 +77,14 @@ class AuthService extends ChangeNotifier {
       );
       
       if (response.statusCode == 200) {
-        print('✅ Token verificado con el backend');
         return true;
       } else {
-        print('❌ Token inválido en el backend: ${response.statusCode}');
         _accessToken = null;
         _currentUser = null;
         notifyListeners();
         return false;
       }
     } catch (e) {
-      print('❌ Error verificando token: $e');
       return false;
     }
   }
@@ -103,15 +96,12 @@ class AuthService extends ChangeNotifier {
     _clearError();
 
     try {
-      final url = '$baseUrl/auth/signin';
+      const url = '$baseUrl/auth/signin';
       final body = json.encode({
         'username': username,
         'password': password,
       });
       
-      print('🔐 Login attempt to: $url');
-      print('📤 Request body: $body');
-
       final response = await http.post(
         Uri.parse(url),
         headers: {
@@ -119,9 +109,6 @@ class AuthService extends ChangeNotifier {
         },
         body: body,
       );
-
-      print('📥 Response status: ${response.statusCode}');
-      print('📥 Response body: ${response.body}');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = json.decode(response.body);
@@ -136,16 +123,13 @@ class AuthService extends ChangeNotifier {
         
         _setLoading(false);
         notifyListeners();
-        print('✅ Login successful');
         return true;
       } else {
         _setError('Credenciales incorrectas (Status: ${response.statusCode})');
-        print('❌ Login failed: ${response.statusCode} - ${response.body}');
         return false;
       }
     } catch (e) {
       _setError('Error de conexión: $e');
-      print('❌ Login error: $e');
       return false;
     }
   }
@@ -153,20 +137,17 @@ class AuthService extends ChangeNotifier {
   /// Registra un nuevo usuario
   /// Retorna true si el registro es exitoso, false en caso contrario
   Future<bool> register(String username, String password) async {
-    print('🔧 AuthService.register() iniciado');
+
     _setLoading(true);
     _clearError();
 
     try {
-      final url = '$baseUrl/auth/signup';
+      const url = '$baseUrl/auth/signup';
       final body = json.encode({
         'username': username,
         'password': password,
       });
       
-      print('📝 Register attempt to: $url');
-      print('📤 Request body: $body');
-
       final response = await http.post(
         Uri.parse(url),
         headers: {
@@ -175,28 +156,19 @@ class AuthService extends ChangeNotifier {
         body: body,
       );
 
-      print('📥 Response status: ${response.statusCode}');
-      print('📥 Response body: ${response.body}');
-
       if (response.statusCode == 201) {
-        print('🎉 Registro exitoso, limpiando estado...');
         _isLoading = false;
         _error = null;
-        print('✅ Register successful, estado limpiado');
-        print('🔄 Retornando true desde register()');
         return true;
       } else if (response.statusCode == 409) {
         _setError('El nombre de usuario ya existe');
-        print('❌ Register failed: Username already exists');
         return false;
       } else {
         _setError('Error en el registro (Status: ${response.statusCode})');
-        print('❌ Register failed: ${response.statusCode} - ${response.body}');
         return false;
       }
     } catch (e) {
       _setError('Error de conexión: $e');
-      print('❌ Register error: $e');
       return false;
     }
   }
@@ -211,15 +183,9 @@ class AuthService extends ChangeNotifier {
 
   /// Limpia el estado después del registro exitoso
   void clearAfterRegister() {
-    print('🧹 clearAfterRegister() ejecutándose...');
-    try {
-      _isLoading = false;
-      _error = null;
-      notifyListeners();
-      print('🧹 Estado limpiado, notificando listeners');
-    } catch (e) {
-      print('❌ Error en clearAfterRegister: $e');
-    }
+    _isLoading = false;
+    _error = null;
+    notifyListeners();
   }
 
   /// Obtiene los headers de autorización para las peticiones

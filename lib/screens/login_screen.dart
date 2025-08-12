@@ -6,6 +6,8 @@ import '../widgets/gradient_background.dart';
 /// Pantalla de inicio de sesión
 /// Muestra un formulario para que los usuarios puedan autenticarse
 class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -21,7 +23,7 @@ class LoginScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Header con logo y título
-                  AppHeader(
+                  const AppHeader(
                     title: 'Bienvenido',
                     subtitle: 'Inicia sesión para continuar',
                   ),
@@ -37,27 +39,27 @@ class LoginScreen extends StatelessWidget {
                     ),
                     padding: EdgeInsets.all(isSmallScreen ? 20 : 30),
                     decoration: BoxDecoration(
-                      color: Color(0xFFF5F5F5).withOpacity(0.95),
+                      color: const Color(0xFFF5F5F5).withValues(alpha: 0.95),
                       borderRadius: BorderRadius.circular(isSmallScreen ? 20 : 25),
                       border: Border.all(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         width: 1.5,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.15),
+                          color: Colors.black.withValues(alpha: 0.15),
                           blurRadius: 20,
-                          offset: Offset(0, 10),
+                          offset: const Offset(0, 10),
                           spreadRadius: 2,
                         ),
                         BoxShadow(
-                          color: Colors.white.withOpacity(0.1),
+                          color: Colors.white.withValues(alpha: 0.1),
                           blurRadius: 10,
-                          offset: Offset(0, -5),
+                          offset: const Offset(0, -5),
                         ),
                       ],
                     ),
-                    child: Column(
+                    child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         LoginForm(),
@@ -86,7 +88,7 @@ class LoginScreen extends StatelessWidget {
                         child: Text(
                           'Regístrate aquí',
                           style: TextStyle(
-                            color: Color(0xFFF5F5F5),
+                            color: const Color(0xFFF5F5F5),
                             fontSize: isSmallScreen ? 14 : 16,
                             fontWeight: FontWeight.bold,
                             decoration: TextDecoration.underline,

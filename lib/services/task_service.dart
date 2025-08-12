@@ -41,14 +41,8 @@ class TaskService extends ChangeNotifier {
 
       final uri = Uri.parse('$baseUrl/tasks').replace(queryParameters: queryParams);
       final interceptor = HttpInterceptor(authService);
-      
-      print('📋 Getting tasks from: $uri');
-      print('🔑 Access token: ${authService.accessToken}');
 
       final response = await interceptor.get(uri.toString());
-
-      print('📥 Tasks response status: ${response.statusCode}');
-      print('📥 Tasks response body: ${response.body}');
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
@@ -62,11 +56,9 @@ class TaskService extends ChangeNotifier {
       }
     } on AuthException catch (e) {
       _setError(e.toString());
-      print('❌ Auth error: $e');
       return [];
     } catch (e) {
-      _setError('Error de conexión: $e');
-      print('❌ Get tasks error: $e');
+      _setError('Error de conexión: $e'); 
       return [];
     }
   }
@@ -102,24 +94,17 @@ class TaskService extends ChangeNotifier {
     _clearError();
 
     try {
-      final url = '$baseUrl/tasks';
+      const url = '$baseUrl/tasks';
       final body = json.encode({
         'title': title,
         'description': description,
       });
       final interceptor = HttpInterceptor(authService);
       
-      print('📝 Creating task at: $url');
-      print('📤 Request body: $body');
-      print('🔑 Access token: ${authService.accessToken}');
-
       final response = await interceptor.post(
         url,
         body: body,
       );
-
-      print('📥 Create task response status: ${response.statusCode}');
-      print('📥 Create task response body: ${response.body}');
 
       if (response.statusCode == 201) {
         final data = json.decode(response.body);
@@ -127,20 +112,16 @@ class TaskService extends ChangeNotifier {
         _tasks.add(newTask);
         _setLoading(false);
         notifyListeners();
-        print('✅ Task created successfully');
         return newTask;
       } else {
         _setError('Error al crear la tarea (Status: ${response.statusCode})');
-        print('❌ Create task failed: ${response.statusCode} - ${response.body}');
         return null;
       }
     } on AuthException catch (e) {
       _setError(e.toString());
-      print('❌ Auth error: $e');
       return null;
     } catch (e) {
       _setError('Error de conexión: $e');
-      print('❌ Create task error: $e');
       return null;
     }
   }
@@ -182,7 +163,6 @@ class TaskService extends ChangeNotifier {
       }
     } on AuthException catch (e) {
       _setError(e.toString());
-      print('❌ Auth error: $e');
       return null;
     } catch (e) {
       _setError('Error de conexión: $e');
@@ -210,8 +190,7 @@ class TaskService extends ChangeNotifier {
         return false;
       }
     } on AuthException catch (e) {
-      _setError(e.toString());
-      print('❌ Auth error: $e');
+      _setError(e.toString()); 
       return false;
     } catch (e) {
       _setError('Error de conexión: $e');

@@ -4,11 +4,13 @@ import '../services/theme_service.dart';
 
 /// Widget que se muestra cuando no hay tareas con animaciones
 class EmptyTasks extends StatefulWidget {
+  const EmptyTasks({super.key});
+
   @override
-  _EmptyTasksState createState() => _EmptyTasksState();
+  EmptyTasksState createState() => EmptyTasksState();
 }
 
-class _EmptyTasksState extends State<EmptyTasks>
+class EmptyTasksState extends State<EmptyTasks>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
@@ -19,7 +21,7 @@ class _EmptyTasksState extends State<EmptyTasks>
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 2000),
       vsync: this,
     );
     
@@ -67,7 +69,7 @@ class _EmptyTasksState extends State<EmptyTasks>
           animation: _animationController,
           builder: (context, child) {
             return SingleChildScrollView(
-              child: Container(
+              child: SizedBox(
                 height: MediaQuery.of(context).size.height * (isSmallScreen ? 0.5 : 0.6),
                 child: Center(
                   child: Column(
@@ -85,25 +87,25 @@ class _EmptyTasksState extends State<EmptyTasks>
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                                 colors: [
-                                  themeService.accentColor.withOpacity(0.3),
-                                  themeService.accentColor.withOpacity(0.1),
+                                  themeService.accentColor.withValues(alpha: 0.3),
+                                  themeService.accentColor.withValues(alpha: 0.1),
                                 ],
                               ),
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: themeService.accentColor.withOpacity(0.5),
+                                color: themeService.accentColor.withValues(alpha: 0.5),
                                 width: 2,
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
+                                  color: Colors.black.withValues(alpha: 0.1),
                                   blurRadius: 20,
-                                  offset: Offset(0, 10),
+                                  offset: const Offset(0, 10),
                                 ),
                                 BoxShadow(
-                                  color: Colors.white.withOpacity(0.2),
+                                  color: Colors.white.withValues(alpha: 0.2),
                                   blurRadius: 15,
-                                  offset: Offset(0, -8),
+                                  offset: const Offset(0, -8),
                                 ),
                               ],
                             ),
@@ -131,20 +133,20 @@ class _EmptyTasksState extends State<EmptyTasks>
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                               colors: [
-                                Colors.white.withOpacity(0.15),
-                                Colors.white.withOpacity(0.05),
+                                Colors.white.withValues(alpha: 0.15),
+                                Colors.white.withValues(alpha: 0.05),
                               ],
                             ),
                             borderRadius: BorderRadius.circular(isSmallScreen ? 15 : 20),
                             border: Border.all(
-                              color: Colors.white.withOpacity(0.3),
+                              color: Colors.white.withValues(alpha: 0.3),
                               width: 1.5,
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
+                                color: Colors.black.withValues(alpha: 0.1),
                                 blurRadius: 15,
-                                offset: Offset(0, 8),
+                                offset: const Offset(0, 8),
                               ),
                             ],
                           ),
@@ -157,9 +159,9 @@ class _EmptyTasksState extends State<EmptyTasks>
                               letterSpacing: 1.0,
                               shadows: [
                                 Shadow(
-                                  offset: Offset(0, 2),
+                                  offset: const Offset(0, 2),
                                   blurRadius: 4,
-                                  color: Colors.black.withOpacity(0.3),
+                                  color: Colors.black.withValues(alpha: 0.3),
                                 ),
                               ],
                             ),
@@ -178,10 +180,10 @@ class _EmptyTasksState extends State<EmptyTasks>
                             vertical: isSmallScreen ? 6 : 8
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.1),
+                            color: Colors.white.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(isSmallScreen ? 12 : 15),
                             border: Border.all(
-                              color: Colors.white.withOpacity(0.2),
+                              color: Colors.white.withValues(alpha: 0.2),
                               width: 1,
                             ),
                           ),
@@ -193,9 +195,9 @@ class _EmptyTasksState extends State<EmptyTasks>
                               fontWeight: FontWeight.w500,
                               shadows: [
                                 Shadow(
-                                  offset: Offset(0, 1),
+                                  offset: const Offset(0, 1),
                                   blurRadius: 2,
-                                  color: Colors.black.withOpacity(0.2),
+                                  color: Colors.black.withValues(alpha: 0.2),
                                 ),
                               ],
                             ),
