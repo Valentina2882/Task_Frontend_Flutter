@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/task_model.dart';
+import '../models/task.dart';
 
 class TaskFormDialog extends StatefulWidget {
   final Task? initial;
@@ -14,14 +14,14 @@ class TaskFormDialog extends StatefulWidget {
 class _TaskFormDialogState extends State<TaskFormDialog> {
   late final TextEditingController titleController;
   late final TextEditingController descriptionController;
-  late bool isCompleted;
+  late TaskStatus status;
 
   @override
   void initState() {
     super.initState();
     titleController = TextEditingController(text: widget.initial?.title ?? '');
     descriptionController = TextEditingController(text: widget.initial?.description ?? '');
-    isCompleted = widget.initial?.isCompleted ?? false;
+    status = widget.initial?.status ?? TaskStatus.OPEN;
   }
 
   @override
@@ -52,13 +52,19 @@ class _TaskFormDialogState extends State<TaskFormDialog> {
             const SizedBox(height: 16),
             Row(
               children: [
-                const Icon(Icons.check_circle_outline, size: 20),
+                const Icon(Icons.flag_outlined, size: 20),
                 const SizedBox(width: 8),
-                const Text('Completada'),
+                const Text('Estado'),
                 const Spacer(),
-                Switch(
-                  value: isCompleted,
-                  onChanged: (value) => setDialogState(() => isCompleted = value),
+                DropdownButton<TaskStatus>(
+                  value: status,
+                  onChanged: (value) => setDialogState(() => status = value!),
+                  items: TaskStatus.values.map((status) {
+                    return DropdownMenuItem(
+                      value: status,
+                      child: Text(status.displayName),
+                    );
+                  }).toList(),
                 ),
               ],
             ),
@@ -87,10 +93,11 @@ class _TaskFormDialogState extends State<TaskFormDialog> {
               }
 
               final task = Task(
-                id: widget.initial?.id ?? '',
+                id: widget.initial?.id ?? 0,
                 title: title,
-                description: description.isEmpty ? null : description,
-                isCompleted: isCompleted, // siempre boolean
+                description: description.isEmpty ? 'Sin descripción' : description,
+                status: status,
+                userId: 1, // TODO: Obtener del usuario actual
               );
 
               await widget.onSubmit(task);
